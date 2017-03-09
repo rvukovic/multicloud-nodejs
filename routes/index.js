@@ -3,13 +3,17 @@ var router = express.Router();
 
 var azure = require('azure-storage');
 
+var cloudWrp = require('../cloud-wrapper');
+
 /* GET home page. */
 router.get('/', function(req, res, next) {
   
  //----------------------------------------------------
-    var blobSvc = azure.createBlobService();
+  cloudWrp.initCloudService('azure');
+  
+  var now = new Date().toISOString()
 
-    blobSvc.createBlockBlobFromLocalFile('images-in', '.gitignore',
+  cloudWrp.createBoxFileFromLocalFile('images-in', '.gitignore-'+ now,
         '/Users/robert/Work/Tests/Azure/Arch9/multicloud-nodejs/.gitignore',
         function (error, result, response) {
             if (!error) {
@@ -18,11 +22,8 @@ router.get('/', function(req, res, next) {
                 console.log('ERROR: blob upload: ' + error);
             }
         });
-    //----------------------------------------------------
-
-    var queueSvc = azure.createQueueService();
-    var now = new Date().toISOString();
-    queueSvc.createMessage('a9-queue-items', "Message " + now, function (error, result, response) {
+    
+    cloudWrp.createMessage('a9-queue-items', "Message " + now, function (error, result, response) {
         if (!error) {
             console.log('Message created');
         } else {
@@ -30,7 +31,6 @@ router.get('/', function(req, res, next) {
         }
     });
     //----------------------------------------------------
-
 
 
   res.render('index', { title: 'Express' });
