@@ -1,5 +1,8 @@
 var express = require('express');
 var router = express.Router();
+var fs = require('fs');
+var multer = require('multer');
+var upload = multer({ dest: 'uploads/' });
 
 var cloudWrp = require('../cloud-wrapper');
 cloudWrp.initCloudService('azure');
@@ -27,20 +30,29 @@ router.get('/newMessage', function(req, res, next) {
 });
 
 router.get('/uploadFile', function(req, res, next) {
+  res.render('test/uploadFile', { title: 'Upload file' });
+});
 
-  var now = new Date().toISOString();
+router.post('/uploadFile', upload.single('uploadFile'), function (req, res, next) {
+    // req.file is the `avatar` file
+    // req.body will hold the text fields, if there were any
+    //console.log(req.body); //form fields
+    //console.log(req.file); //form files
+    //console.log(req.path); //form files
 
-  cloudWrp.createBoxFileFromLocalFile('images-in', '.gitignore-'+ now,
-        '/Users/robert/Work/Tests/Azure/Arch9/multicloud-nodejs/.gitignore',
+    cloudWrp.createBoxFileFromLocalFile('images-in', req.file.originalname,
+        req.file.path,
         function (error, result, response) {
+
+            fs.unlink(req.file.path);
             if (!error) {
                 console.log('file uploaded');
+                res.send('File uploaded');
             } else {
                 console.log('ERROR: blob upload: ' + error);
+                res.send('ERROR: blob upload: ' + error);
             }
-        });
-    
-  res.render('test/uploadFile', { title: 'Upload file' });
+    });
 });
 
 
