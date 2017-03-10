@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8">
+    <meta charset="utf-8">
+    <title><%= title %></title>
+    <meta name="generator" content="Bootply" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+    <!-- bower:css -->
+    <!-- endbower -->
+    
+    <!-- bower:js -->
+    <!-- endbower -->
+
+    <!-- inject:css -->
+
+    <!-- endinject -->
+
+    <!-- inject:js -->
+    <!-- endinject -->
+
+  </head>
+    <body>
+        <form action="https://arch9funcapp.azurewebsites.net/api/HttpTriggerJS1" 
+                        method="post" enctype="multipart/form-data">
+            
+            <input type="text" name="name" value="localTest"/>
+            <input type="file" name="slika" value="/Users/robert/Work/Tests/Azure/Arch9/static/index.html" />
+            <input type="submit" value="Upload" />
+        </form>
+    </body>
+</html>

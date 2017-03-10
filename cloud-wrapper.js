@@ -26,4 +26,4 @@ exports.createBoxFileFromLocalFile = function (container, blob, localFileName, o
 
 exports.createMessage = function (queue, messageText, callback) {
   return _cloudSrv.createMessage(queue, messageText, callback);
-}
+};

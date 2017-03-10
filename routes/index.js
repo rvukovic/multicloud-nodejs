@@ -11,7 +11,7 @@ router.get('/', function(req, res, next) {
  //----------------------------------------------------
   cloudWrp.initCloudService('azure');
   
-  var now = new Date().toISOString()
+  var now = new Date().toISOString();
 
   cloudWrp.createBoxFileFromLocalFile('images-in', '.gitignore-'+ now,
         '/Users/robert/Work/Tests/Azure/Arch9/multicloud-nodejs/.gitignore',
@@ -23,7 +23,7 @@ router.get('/', function(req, res, next) {
             }
         });
     
-    cloudWrp.createMessage('a9-queue-items', "Message " + now, function (error, result, response) {
+    cloudWrp.createMessage('a9-queue-items', 'Message ' + now, function (error, result, response) {
         if (!error) {
             console.log('Message created');
         } else {
