@@ -36,11 +36,12 @@
         <%= title %>
     </p>
 
+    
     <div class="container">
         <ul class="">
             <%  items.forEach(function (item) { %>
                 <li>
-                        <%= item.description._ %> - <%= item.inserted._.toISOString() %> 
+                        <%= item.description %> - <%= item.inserted %> 
                 </li>
                 <%  }) %>
         </ul>

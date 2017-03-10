@@ -73,7 +73,8 @@ router.get('/files', function (req, res, next) {
     //https://docs.microsoft.com/en-us/azure/storage/storage-nodejs-how-to-use-table-storage
     //http://stackoverflow.com/questions/40468960/easiest-way-to-map-azure-table-storage-data-model-in-node-js
     //http://stackoverflow.com/questions/34334433/transform-response-from-azure-table-storage-with-node
-   
+    //https://github.com/Azure-Samples/storage-table-node-getting-started
+    //https://docs.microsoft.com/en-us/rest/api/storageservices/fileservices/query-entities
     tableSvc.createTableIfNotExists('multicloud', function (error, result, response) {
         if (!error) {
             // Table exists or created
@@ -102,10 +103,14 @@ router.get('/files', function (req, res, next) {
     
     */
 
+    var options = {
+        payloadFormat: "application/json;odata=nometadata"
+    };
+
     var query = new cloudWrp.azure.TableQuery()
         .top(5);
 
-    tableSvc.queryEntities('multicloud', query, null, function (error, result, response) {
+    tableSvc.queryEntities('multicloud', query, null, options, function (error, result, response) {
         if (!error) {
             // query was successful
             //console.log(result);
@@ -113,20 +118,21 @@ router.get('/files', function (req, res, next) {
             //console.log(fileList[0].description);
             //console.log(result.entries['0'].description._);
 
-            var items = result.entries;
-            items.forEach(function (item) {
-                console.log(item);
-                console.log("Task: %s, %s, %s, %s", item.PartitionKey._, item.RowKey._, item.description._, '');
-            });
+            // var items = result.entries;
+            
+            // items.forEach(function (item) {
+            //     console.log(item);
+            //     console.log("Task: %s, %s, %s, %s", item.PartitionKey._, item.RowKey._, item.description._, '');
+            // });
 
+            // var items2 = response.body;            
 
             res.render('test/files', {
                 title: 'Uploaded images',
-                items: result.entries
+                items: response.body.value,
             });
         }
     });
-
 });
 
 module.exports = router;
