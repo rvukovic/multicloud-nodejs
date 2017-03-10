@@ -8,32 +8,8 @@ var cloudWrp = require('../cloud-wrapper');
 /* GET home page. */
 router.get('/', function(req, res, next) {
   
- //----------------------------------------------------
-  cloudWrp.initCloudService('azure');
-  
-  var now = new Date().toISOString();
 
-  cloudWrp.createBoxFileFromLocalFile('images-in', '.gitignore-'+ now,
-        '/Users/robert/Work/Tests/Azure/Arch9/multicloud-nodejs/.gitignore',
-        function (error, result, response) {
-            if (!error) {
-                console.log('file uploaded');
-            } else {
-                console.log('ERROR: blob upload: ' + error);
-            }
-        });
-    
-    cloudWrp.createMessage('a9-queue-items', 'Message ' + now, function (error, result, response) {
-        if (!error) {
-            console.log('Message created');
-        } else {
-            console.log('ERROR: Queue message:' + error);
-        }
-    });
-    //----------------------------------------------------
-
-
-  res.render('index', { title: 'Express' });
+  res.render('index', { title: 'Multi cloud PoC - v0.01' });
 });
 
 module.exports = router;
