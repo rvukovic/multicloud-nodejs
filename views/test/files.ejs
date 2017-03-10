@@ -31,13 +31,20 @@
 </head>
 
 <body>
-    <form action="/test/uploadFile" method="post" enctype="multipart/form-data">
+    <h1><%= title %></h1>
+    <p>Welcome to
+        <%= title %>
+    </p>
 
-        <input type="text" name="name" value="localTest" />
-        <input type="file" name="uploadFile" />
-
-        <input type="submit" value="Upload" class="btn" />
-    </form>
+    <div class="container">
+        <ul class="">
+            <%  items.forEach(function (item) { %>
+                <li>
+                        <%= item.description._ %> - <%= item.inserted._.toISOString() %> 
+                </li>
+                <%  }) %>
+        </ul>
+    </div>
 </body>
 
 </html>

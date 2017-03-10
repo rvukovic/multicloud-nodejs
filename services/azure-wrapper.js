@@ -2,6 +2,7 @@ var azure = require('azure-storage');
 
 var exports = module.exports;
 
+exports.azure = azure;
 
 var AzureBlobService = azure.createBlobService();
 exports.AzureBlobService = AzureBlobService;
@@ -11,9 +12,9 @@ exports.AzureQueueService = AzureQueueService;
 
 
 exports.createBoxFileFromLocalFile = function (container, blob, localFileName, optionsOrCallback, callback) {
-  return AzureBlobService.createBlockBlobFromLocalFile(container, blob, localFileName, optionsOrCallback, callback);
+    return AzureBlobService.createBlockBlobFromLocalFile(container, blob, localFileName, optionsOrCallback, callback);
 };
 
 exports.createMessage = function (queue, messageText, callback) {
-  return AzureQueueService.createMessage(queue, messageText, callback);
+    return AzureQueueService.createMessage(queue, messageText, callback);
 };
