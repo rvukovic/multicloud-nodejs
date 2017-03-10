@@ -9,12 +9,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
 
     <!-- bower:css -->
+    <link rel="stylesheet" href="/lib/bootstrap/dist/css/bootstrap.css" />
     <!-- endbower -->
     
     <!-- bower:js -->
+    <script src="/lib/jquery/dist/jquery.js"></script>
+    <script src="/lib/bootstrap/dist/js/bootstrap.js"></script>
     <!-- endbower -->
 
     <!-- inject:css -->
+
+    <link rel="stylesheet" href="/css/style.css">
 
     <!-- endinject -->
 
@@ -23,12 +28,13 @@
 
   </head>
     <body>
-        <form action="https://arch9funcapp.azurewebsites.net/api/HttpTriggerJS1" 
+        <form action="/test/fileUpload" 
                         method="post" enctype="multipart/form-data">
             
             <input type="text" name="name" value="localTest"/>
-            <input type="file" name="slika" value="/Users/robert/Work/Tests/Azure/Arch9/static/index.html" />
-            <input type="submit" value="Upload" />
+            <input type="file" name="slika"  />
+
+            <input type="submit" value="Upload" class="btn"/>
         </form>
     </body>
 </html>

@@ -32,7 +32,7 @@ gulp.task('inject', function () {
         ignorePath: '../../public'
     };
 
-    return gulp.src('./views/*.ejs')
+    return gulp.src(['./views/*.ejs', './views/**/*.ejs'])
         .pipe(wiredep(options))
         .pipe(inject(injectSrc, injectOptions))
         .pipe(gulp.dest('./views'));
