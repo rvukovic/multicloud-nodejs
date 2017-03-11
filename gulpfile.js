@@ -3,7 +3,7 @@ var jshint = require('gulp-jshint');
 var jscs = require('gulp-jscs');
 var nodemon = require('gulp-nodemon');
 
-var jsFiles = ['*.js', 'routes/*.js'];
+var jsFiles = ['*.js', 'routes/*.js', 'services/*.js'];
 
 gulp.task('style', function () {
     return gulp.src(jsFiles)
@@ -16,6 +16,7 @@ gulp.task('style', function () {
 
 gulp.task('inject', function () {
     var wiredep = require('wiredep').stream;
+                
     var inject = require('gulp-inject');
 
     var injectSrc = gulp.src(['./public/css/*.css', './public/js/*.js'], {
@@ -29,7 +30,7 @@ gulp.task('inject', function () {
     var options = {
         bowerJson: require('./bower.json'),
         directory: './public/lib',
-        ignorePath: '../../public'
+        ignorePath: /(\.\.\/){1,2}public/
     };
 
     return gulp.src(['./views/*.ejs', './views/**/*.ejs'])
