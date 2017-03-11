@@ -55,5 +55,8 @@ npm-debug.log
 # Yarn Integrity file
 .yarn-integrity
 
+#Visual Studio Code configuration
+.vscode/
+
 # dotenv environment variables file
 .env
