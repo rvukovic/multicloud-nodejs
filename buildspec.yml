@@ -1,9 +1,18 @@
 version: 0.1
 
 phases:
+  install:
+    commands:
+      - echo Installing bower and gulp
+      - sudo npm install bower gulp -g --allow-root
   build:
     commands:
+      - echo Building project
       - npm install
       - bower install
-      - npm-bundle
+      - gulp inject
+      - zip -r target/multicloud.zip .
+artifacts:
+  files:
+    - target/multicloud.zip
   
