@@ -31,13 +31,44 @@
 </head>
 
 <body>
-    <form action="/test/uploadFile" method="post" enctype="multipart/form-data">
+    <header class="navbar navbar-bright navbar-fixed-top" role="banner">
+        <div class="container">
+            <div class="navbar-header">
+                <button class="navbar-toggle" type="button" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a href="/" class="navbar-brand">Home</a>
+            </div>
+            <nav class="collapse navbar-collapse" role="navigation">
 
-        <input type="text" name="name" value="localTest" />
-        <input type="file" name="uploadFile" />
+                <ul class="nav navbar-nav">
+                    <!-- <li><a></a></li> -->
+                </ul>
 
-        <input type="submit" value="Upload" class="btn" />
-    </form>
+                <ul class="nav navbar-right navbar-nav">
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <form action="/test/uploadFile" method="post" enctype="multipart/form-data">
+            <div class="row">
+                <label class="col-sm-2" for="name">File title</label>
+                <input class="col-sm-6" type="text" name="name" value="localTest" />
+            </div>
+            <div class="row">
+                <label class="col-sm-2" for="uploadFile">File to upload</label>
+                <input class="col-sm-8" type="file" name="uploadFile" />
+            </div>
+            <div class="row">
+                <input  type="submit" value="Upload" class="btn btn-default" />
+            </div>
+        </form>
+    </div>
 </body>
 
 </html>
