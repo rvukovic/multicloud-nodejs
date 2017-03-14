@@ -30,4 +30,7 @@ exports.createMessage = function (queue, messageText, callback) {
     return _cloudSrv.createMessage(queue, messageText, callback);
 };
 
+exports.getItemsList = function (tableName, itemLimit, callback) {
+    return _cloudSrv.getItemsList(tableName, itemLimit, callback);
+};
 //http://gauravmantri.com/2012/04/30/comparing-windows-azure-table-storage-and-amazon-dynamodb/
