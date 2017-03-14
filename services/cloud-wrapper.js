@@ -8,8 +8,20 @@ var _cloudSrv;
 exports.azure = azureService.azure;
 exports.aws = awsService;
 
-exports.initCloudService = function (cloudServiceName) {
-    switch (cloudServiceName) {
+var CloudName = process.env['CLOUD_SERVICE'];
+exports.CloudName = CloudName;
+
+var BoxName = process.env['BOX_STORAGE_NAME'];
+exports.BoxName = BoxName;
+
+var MessageQueueName = process.env['MESSAGE_QUEUE_NAME'];
+exports.MessageQueueName = MessageQueueName;
+
+var TableName = process.env['TABLE_STORAGE_NAME'];
+exports.TableName = TableName;
+
+exports.initCloudService = function () {
+    switch (CloudName) {
     case 'azure':
         _cloudSrv = azureService;
         console.log('Selecting Azure as cloud service');

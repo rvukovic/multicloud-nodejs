@@ -7,7 +7,7 @@ var upload = multer({
 });
 
 var cloudWrp = require('../services/cloud-wrapper');
-cloudWrp.initCloudService(process.env['CLOUD_SERVICE']); // 'azure' or 'aws'
+cloudWrp.initCloudService(); // 'azure' or 'aws'
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
@@ -21,7 +21,7 @@ router.get('/newMessage', function (req, res, next) {
     var now = new Date().toISOString();
     var msgContent = 'Message ' + now;
 
-    cloudWrp.createMessage('a9-queue-items', msgContent, function (error, result, response) {
+    cloudWrp.createMessage(cloudWrp.MessageQueueName, msgContent, function (error, result, response) {
         if (!error) {
             console.log('Message created');
         } else {
@@ -29,7 +29,6 @@ router.get('/newMessage', function (req, res, next) {
         }
     });
 
-    //res.render('index', { title: 'Express' });
     res.send('New message created: ' + msgContent);
 });
 
@@ -40,13 +39,7 @@ router.get('/uploadFile', function (req, res, next) {
 });
 
 router.post('/uploadFile', upload.single('uploadFile'), function (req, res, next) {
-    // req.file is the `avatar` file
-    // req.body will hold the text fields, if there were any
-    //console.log(req.body); //form fields
-    //console.log(req.file); //form files
-    //console.log(req.path); //form files
-
-    cloudWrp.createBoxFileFromLocalFile('images-in', req.file.originalname, req.file.path,
+    cloudWrp.createBoxFileFromLocalFile(cloudWrp.BoxName, req.file.originalname, req.file.path,
         function (error, result, response) {
 
             fs.unlink(req.file.path);
@@ -75,7 +68,7 @@ router.post('/newFile', function (req, res, next) {
         inserted: new Date()
     };
 
-    cloudWrp.insertItem('multicloud', newRecord, function (error, result, response) {
+    cloudWrp.insertItem(cloudWrp.TableName, newRecord, function (error, result, response) {
         if (!error) {
             console.log('record inserted: ' + newRecord);
         } else {
@@ -89,7 +82,7 @@ router.post('/newFile', function (req, res, next) {
 
 router.get('/files', function (req, res, next) {
 
-    cloudWrp.getItemsList('multicloud', 100, function (error, result, response) {
+    cloudWrp.getItemsList(cloudWrp.TableName, 100, function (error, result, response) {
         if (!error) {
             res.render('testAzure/files', {
                 title: 'Uploaded images',
