@@ -4,14 +4,15 @@ phases:
   install:
     commands:
       - echo Installing bower and gulp
-      - npm install bower gulp -g
+      - npm install bower gulp -g --
   build:
     commands:
       - echo Building project
       - npm install
       - bower install
+      - gulp inject
       - zip -r target/multicloud.zip .
 artifacts:
   files:
-    - multicloud
+    - target/multicloud.zip
   
