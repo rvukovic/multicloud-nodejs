@@ -55,18 +55,28 @@
     </header>
 
     <div class="container">
-        <form action="/test/uploadFile" method="post" enctype="multipart/form-data">
-            <div class="row">
-                <label class="col-sm-2" for="name">File title</label>
-                <input class="col-sm-6" type="text" name="name" value="localTest" />
+        &nbsp;
+    </div>
+    <div class="container">
+        <form class="form-horizontal" action="/test/uploadFile" method="post" enctype="multipart/form-data">
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="name">File title</label>
+                <div class="col-sm-10">
+                    <input class="form-control" type="text" name="name" value="localTest" />
+                </div>
             </div>
-            <div class="row">
-                <label class="col-sm-2" for="uploadFile">File to upload</label>
-                <input class="col-sm-8" type="file" name="uploadFile" />
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="uploadFile">File to upload</label>
+                <div class="col-sm-10">
+                    <input class="form-control" type="file" name="uploadFile" />
+                </div>
             </div>
-            <div class="row">
-                <input  type="submit" value="Upload" class="btn btn-default" />
+            <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                    <input type="submit" value="Upload" class="btn btn-primary" />
+                </div>
             </div>
+
         </form>
     </div>
 </body>

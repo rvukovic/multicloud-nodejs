@@ -11,7 +11,7 @@ cloudWrp.initCloudService(process.env['CLOUD_SERVICE']); // 'azure' or 'aws'
 
 /* GET users listing. */
 router.get('/', function (req, res, next) {
-    res.render('test/index', {
+    res.render('testAzure/index', {
         title: 'Test page'
     });
 });
@@ -34,7 +34,7 @@ router.get('/newMessage', function (req, res, next) {
 });
 
 router.get('/uploadFile', function (req, res, next) {
-    res.render('test/uploadFile', {
+    res.render('testAzure/uploadFile', {
         title: 'Upload file'
     });
 });
@@ -46,8 +46,7 @@ router.post('/uploadFile', upload.single('uploadFile'), function (req, res, next
     //console.log(req.file); //form files
     //console.log(req.path); //form files
 
-    cloudWrp.createBoxFileFromLocalFile('images-in', req.file.originalname,
-        req.file.path,
+    cloudWrp.createBoxFileFromLocalFile('images-in', req.file.originalname, req.file.path,
         function (error, result, response) {
 
             fs.unlink(req.file.path);
@@ -61,15 +60,23 @@ router.post('/uploadFile', upload.single('uploadFile'), function (req, res, next
         });
 });
 
+router.get('/newFile', function (req, res, next) {
+       res.render('testAzure/newFile', {
+               title: 'Create a new Table record',
+            });
+});
+
+router.post('/newFile', function (req, res, next) {
+  
+   res.send('received: ' + req.body);
+});
 
 
-
-var fileList = ['aaaa', 'bbbbbbb', 'cccccccc'];
 router.get('/files', function (req, res, next) {
   
     cloudWrp.getItemsList('multicloud', 100, function (error, result, response) {
         if (!error) {
-            res.render('test/files', {
+            res.render('testAzure/files', {
                 title: 'Uploaded images',
                 // Azure specific
                 items: response.body.value,
