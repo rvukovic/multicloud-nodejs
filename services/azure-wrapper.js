@@ -2,7 +2,7 @@ var azure = require('azure-storage');
 
 var exports = module.exports;
 
-//exports.azure = azure;
+exports.azure = azure;
 
 var AzureBlobService = azure.createBlobService();
 //exports.AzureBlobService = AzureBlobService;
@@ -62,4 +62,8 @@ exports.getItemsList = function (tableName, itemLimit, callback) {
      var query = new azure.TableQuery().top(itemLimit);
 
      return AzureTableService.queryEntities(tableName, query, null, options, callback);   
+};
+
+exports.insertItem = function (tableName, item, callback) {
+    return AzureTableService.insertEntity(tableName, item, callback);
 };

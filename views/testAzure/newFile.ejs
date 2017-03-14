@@ -58,22 +58,35 @@
         &nbsp;
     </div>
     <div class="container">
-        <form class="form-horizontal" action="/testAzure/uploadFile" method="post" enctype="multipart/form-data">
+        <form class="form-horizontal" action="/testAzure/newFile" method="post" >
             <div class="form-group">
-                <label class="control-label col-sm-2" for="name">File title</label>
+                <label class="control-label col-sm-2" for="key">Partition Key</label>
                 <div class="col-sm-10">
-                    <input class="form-control" type="text" name="name" value="localTest" />
+                    <input class="form-control" type="text" name="key" value="" />
                 </div>
             </div>
             <div class="form-group">
-                <label class="control-label col-sm-2" for="uploadFile">File to upload</label>
+                <label class="control-label col-sm-2" for="rowId">Row ID</label>
                 <div class="col-sm-10">
-                    <input class="form-control" type="file" name="uploadFile" />
+                    <input class="form-control" type="text" name="rowId" value="" />
                 </div>
             </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="description">Description</label>
+                <div class="col-sm-10">
+                    <input class="form-control" type="text" name="description" value="Description" />
+                </div>
+            </div>
+            <div class="form-group">
+                <label class="control-label col-sm-2" for="tag">Tag</label>
+                <div class="col-sm-10">
+                    <input class="form-control" type="text" name="tag" value="some tag" />
+                </div>
+            </div>
+
             <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                    <input type="submit" value="Upload" class="btn btn-primary" />
+                    <input type="submit" value="Create Record" class="btn btn-primary" />
                 </div>
             </div>
 

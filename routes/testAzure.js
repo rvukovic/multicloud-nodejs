@@ -61,19 +61,34 @@ router.post('/uploadFile', upload.single('uploadFile'), function (req, res, next
 });
 
 router.get('/newFile', function (req, res, next) {
-       res.render('testAzure/newFile', {
-               title: 'Create a new Table record',
-            });
+    res.render('testAzure/newFile', {
+        title: 'Create a new Table record',
+    });
 });
 
 router.post('/newFile', function (req, res, next) {
-  
-   res.send('received: ' + req.body);
+    var newRecord = {
+        PartitionKey: req.body.key,
+        RowKey: req.body.rowId,
+        description: req.body.description,
+        description2: req.body.tag,
+        inserted: new Date()
+    };
+
+    cloudWrp.insertItem('multicloud', newRecord, function (error, result, response) {
+        if (!error) {
+            console.log('record inserted: ' + newRecord);
+        } else {
+            console.log('ERROR: ' + error);
+        }
+    });
+
+    res.send('received: ' + JSON.stringify(req.body));
 });
 
 
 router.get('/files', function (req, res, next) {
-  
+
     cloudWrp.getItemsList('multicloud', 100, function (error, result, response) {
         if (!error) {
             res.render('testAzure/files', {
