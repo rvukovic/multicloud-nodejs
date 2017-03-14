@@ -9,7 +9,7 @@ phases:
     commands:
       - echo Building project
       - npm install
-      - bower install
+      - bower install --allow-root
       - gulp inject
       - zip -r target/multicloud.zip .
 artifacts:
