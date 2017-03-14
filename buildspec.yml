@@ -4,7 +4,7 @@ phases:
   install:
     commands:
       - echo Installing bower and gulp
-      - npm install bower gulp -g --
+      - sudo npm install bower gulp -g --allow-root
   build:
     commands:
       - echo Building project
