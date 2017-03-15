@@ -7,15 +7,7 @@ var azure = require('azure-storage');
 router.get('/', function (req, res, next) {
 
     res.render('index', {
-        title: 'Multi cloud PoC - v0.11',
-        cloudService: process.env['CLOUD_SERVICE']
-    });
-});
-
-router.get('/processImage', function (req, res, next) {
-
-    res.render('index', {
-        title: 'Multi cloud PoC - v0.11',
+        title: 'Multi cloud PoC - v0.12',
         cloudService: process.env['CLOUD_SERVICE']
     });
 });
