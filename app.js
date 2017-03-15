@@ -8,6 +8,7 @@ var bodyParser = require('body-parser');
 require('dotenv').config();
 
 var index = require('./routes/index');
+var api = require('./routes/api');
 var test = require('./routes/testAzure');
 var awsTest = require('./routes/aws-test');
 
@@ -27,6 +28,7 @@ app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
+app.use('/api', api);
 app.use('/testAzure', test);
 app.use('/aws-test', awsTest);
 

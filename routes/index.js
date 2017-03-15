@@ -12,4 +12,12 @@ router.get('/', function (req, res, next) {
     });
 });
 
+router.get('/processImage', function (req, res, next) {
+
+    res.render('index', {
+        title: 'Multi cloud PoC - v0.11',
+        cloudService: process.env['CLOUD_SERVICE']
+    });
+});
+
 module.exports = router;
