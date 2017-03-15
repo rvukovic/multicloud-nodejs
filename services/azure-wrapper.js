@@ -13,8 +13,8 @@ var AzureQueueService = azure.createQueueService();
 var AzureTableService = azure.createTableService();
 //exports.AzureTableService = AzureTableService;
 
-exports.createBoxFileFromLocalFile = function (container, blob, localFileName, optionsOrCallback, callback) {
-    return AzureBlobService.createBlockBlobFromLocalFile(container, blob, localFileName, optionsOrCallback, callback);
+exports.createBoxFileFromLocalFile = function (container, blob, localFileName, callback) {
+    return AzureBlobService.createBlockBlobFromLocalFile(container, blob, localFileName, callback);
 };
 
 exports.createMessage = function (queue, messageText, callback) {

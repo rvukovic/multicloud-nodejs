@@ -6,7 +6,7 @@ var exports = module.exports;
 var _cloudSrv;
 
 exports.azure = azureService.azure;
-exports.aws = awsService;
+exports.aws = awsService.aws;
 
 var CloudName = process.env['CLOUD_SERVICE'];
 exports.CloudName = CloudName;
@@ -34,8 +34,8 @@ exports.initCloudService = function () {
 };
 
 
-exports.createBoxFileFromLocalFile = function (container, blob, localFileName, optionsOrCallback, callback) {
-    return _cloudSrv.createBoxFileFromLocalFile(container, blob, localFileName, optionsOrCallback, callback);
+exports.createBoxFileFromLocalFile = function (container, blob, localFileName,  callback) {
+    return _cloudSrv.createBoxFileFromLocalFile(container, blob, localFileName, callback);
 };
 
 exports.createMessage = function (queue, messageText, callback) {
