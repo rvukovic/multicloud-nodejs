@@ -43,8 +43,7 @@ router.post('/newMessage', function (req, res, next) {
         inserted: new Date()
     };
 
-  
-    cloudWrp.createMessage(cloudWrp.MessageQueueName, msgBody, function (error, result, response) {
+    cloudWrp.createMessage(cloudWrp.MessageQueueName, newMsg, function (error, result, response) {
         if (!error) {
             console.log('Message created');
             res.send('Message created' + JSON.stringify(newMsg));

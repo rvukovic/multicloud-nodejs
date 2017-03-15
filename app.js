@@ -9,7 +9,7 @@ require('dotenv').config();
 
 var index = require('./routes/index');
 var test = require('./routes/testAzure');
-var awsTest = require('./routes/aws-test')
+var awsTest = require('./routes/aws-test');
 
 var app = express();
 
@@ -28,7 +28,7 @@ app.use(express.static(path.join(__dirname, 'public')));
 
 app.use('/', index);
 app.use('/testAzure', test);
-app.use('/aws-test', awsTest)
+app.use('/aws-test', awsTest);
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
