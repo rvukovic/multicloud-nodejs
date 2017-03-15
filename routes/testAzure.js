@@ -18,18 +18,41 @@ router.get('/', function (req, res, next) {
 
 /* GET home page. */
 router.get('/newMessage', function (req, res, next) {
-    var now = new Date().toISOString();
-    var msgContent = 'Message ' + now;
+    // var now = new Date().toISOString();
+    // var msgContent = 'Message ' + now;
 
-    cloudWrp.createMessage(cloudWrp.MessageQueueName, msgContent, function (error, result, response) {
+    // cloudWrp.createMessage(cloudWrp.MessageQueueName, msgContent, function (error, result, response) {
+    //     if (!error) {
+    //         console.log('Message created');
+    //     } else {
+    //         console.log('ERROR: Queue message:' + error);
+    //     }
+    // });
+     res.render('testAzure/newMsg', {
+        title: 'Create new Message'
+    });
+    //
+});
+
+router.post('/newMessage', function (req, res, next) {
+    var newMsg = {
+        PartitionKey: req.body.key,
+        RowKey: req.body.rowId,
+        description: req.body.description,
+        description2: req.body.tag,
+        inserted: new Date()
+    };
+
+  
+    cloudWrp.createMessage(cloudWrp.MessageQueueName, msgBody, function (error, result, response) {
         if (!error) {
             console.log('Message created');
+            res.send('Message created' + JSON.stringify(newMsg));
         } else {
-            console.log('ERROR: Queue message:' + error);
+            console.log('ERROR: Queue message:' + JSON.stringify(error));
+            res.send('ERROR: Queue message:' + JSON.stringify(error));
         }
     });
-
-    res.send('New message created: ' + msgContent);
 });
 
 router.get('/uploadFile', function (req, res, next) {
@@ -71,12 +94,19 @@ router.post('/newFile', function (req, res, next) {
     cloudWrp.insertItem(cloudWrp.TableName, newRecord, function (error, result, response) {
         if (!error) {
             console.log('record inserted: ' + newRecord);
+            res.send('received: ' + JSON.stringify(req.body));
         } else {
             console.log('ERROR: ' + error);
+            var err = {
+                error: error,
+                result: result,
+                response: response
+            };
+            res.send('ERROR: ' + JSON.stringify(err) );
         }
     });
 
-    res.send('received: ' + JSON.stringify(req.body));
+    
 });
 
 
