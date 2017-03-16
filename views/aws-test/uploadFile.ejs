@@ -69,6 +69,25 @@
             </div>
         </form>
     </div>
+
+    <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Uploaded at</th>
+                    <th>Title</th>
+                </tr>
+            </thead>
+            <tbody>
+                 <%  items.forEach(function (item) { %>
+                 <tr>
+                    <td><%= item.url %></td>
+                    <td><%= item.time %></td>
+                    <td><%= item.title %></td>
+                </tr>
+                <%  }) %>              
+            </tbody>
+        </table>
 </body>
 
 </html>

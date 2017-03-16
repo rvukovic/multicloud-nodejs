@@ -2,6 +2,8 @@ var express = require('express');
 var router = express.Router();
 var fs = require('fs');
 var multer = require('multer');
+var randomstring = require("randomstring");
+
 var upload = multer({
     dest: 'uploads/'
 });
@@ -34,26 +36,49 @@ router.get('/newMessage', function (req, res, next) {
 });
 
 router.get('/uploadFile', function (req, res, next) {
-    res.render('aws-test/uploadFile', {
-        title: 'Upload file'
-    });
+    cloudWrp.getItemsList(cloudWrp.TableName, 1, function(error, data){
+        res.render('aws-test/uploadFile', {
+            title: '',
+            items: data
+        });
+    }); 
 });
 
 router.post('/uploadFile', upload.single('uploadFile'), function (req, res, next) {
-
-    cloudWrp.createBoxFileFromLocalFile('levi9-multicloud-images-in', req.file.originalname,
-        req.file.path,
-        function (error, result, response) {
-
-            //fs.unlink(req.file.path);
-            if (!error) {
-                console.log('file uploaded');
-                res.send('File uploaded');
-            } else {
+    cloudWrp.createBoxFileFromLocalFile(
+        'levi9-multicloud-images-in', req.file.originalname, req.file.path,
+        function (error, data, response) {
+            fs.unlink(req.file.path);
+            if (error) {
                 console.log('ERROR: blob upload: ' + error);
                 res.send('ERROR: blob upload: ' + error);
             }
+            cloudWrp.insertItem( 
+                cloudWrp.TableName, req.file.originalname, (new Date()).getTime(), req.body.name, function(error, data, response) {
+                    if(error) {
+                        console.log('error saving item', error);
+                        res.send('Error saving in db', error)
+                    }
+                }
+            );
+            cloudWrp.createMessage('','',function(error, data){
+                if(error) {
+                    console.log('error sending message', error);
+                    res.send('Error saving in db', error);
+                }
+                console.log('Message sent...');
+            });
+
+        }
+    );
+
+    cloudWrp.getItemsList(cloudWrp.TableName, 1, function(error, data){
+        res.render('aws-test/uploadFile', {
+            title: 'Upload file successful!',
+            items: data
         });
+    }); 
+
 });
 
 module.exports = router;
