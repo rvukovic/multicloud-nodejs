@@ -23,13 +23,13 @@ exports.createMessage = function (queue, messageText, callback) {
 };
 
 exports.getItemsList = function (tableName, itemLimit, callback) {
-    var options = {
-        payloadFormat: 'application/json;odata=nometadata'
-    };
+    // var options = {
+    //     payloadFormat: 'application/json;odata=nometadata'
+    // };
     
      var query = new azure.TableQuery().top(itemLimit);
 
-     return AzureTableService.queryEntities(tableName, query, null, options, callback);   
+     return AzureTableService.queryEntities(tableName, query, null, null, callback);   
 };
 
 exports.insertItem = function (tableName, item, callback) {

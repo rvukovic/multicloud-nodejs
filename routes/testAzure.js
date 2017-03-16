@@ -113,6 +113,7 @@ router.get('/files', function (req, res, next) {
 
     cloudWrp.getItemsList(cloudWrp.TableName, 100, function (error, result, response) {
         if (!error) {
+            console.log(response.body.value);
             res.render('testAzure/files', {
                 title: 'Uploaded images',
                 // Azure specific

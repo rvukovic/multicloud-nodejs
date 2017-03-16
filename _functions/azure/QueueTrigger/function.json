@@ -1,0 +1,12 @@
+{
+    "bindings": [
+        {
+            "name": "myQueueItem",
+            "type": "queueTrigger",
+            "direction": "in",
+            "queueName": "a9-queue-items",
+            "connection": "arch9storage_STORAGE"
+    }
+  ],
+    "disabled": false
+}
