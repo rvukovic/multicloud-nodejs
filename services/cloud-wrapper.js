@@ -17,24 +17,27 @@ exports.BoxName = BoxName;
 var MessageQueueName = process.env['MESSAGE_QUEUE_NAME'];
 exports.MessageQueueName = MessageQueueName;
 
-var TableName = process.env['TABLE_STORAGE_NAME'];
-exports.TableName = TableName;
+var TableNameIn = process.env['TABLE_STORAGE_NAME_IN'];
+exports.TableNameIn = TableNameIn;
+
+var TableNameOut = process.env['TABLE_STORAGE_NAME_OUT'];
+exports.TableNameOut = TableNameOut;
 
 exports.initCloudService = function () {
     switch (CloudName) {
-    case 'azure':
-        _cloudSrv = azureService;
-        console.log('Selecting Azure as cloud service');
-        break;
-    case 'aws':
-        _cloudSrv = awsService;
-        console.log('Selecting AWS as cloud service');
-        break;
+        case 'azure':
+            _cloudSrv = azureService;
+            console.log('Selecting Azure as cloud service');
+            break;
+        case 'aws':
+            _cloudSrv = awsService;
+            console.log('Selecting AWS as cloud service');
+            break;
     }
 };
 
 
-exports.createBoxFileFromLocalFile = function (container, blob, localFileName,  callback) {
+exports.createBoxFileFromLocalFile = function (container, blob, localFileName, callback) {
     return _cloudSrv.createBoxFileFromLocalFile(container, blob, localFileName, callback);
 };
 

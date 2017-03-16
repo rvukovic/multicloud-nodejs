@@ -8,7 +8,7 @@ module.exports = function (context, myQueueItem) {
         headers: {
             'content-type': 'application/json'
         },
-        url: 'http://nodeapp01-dev.azurewebsites.net/api/processImage',
+        url: myQueueItem.callback_url,
         form: myQueueItem
     }, function (error, response, body) {
 

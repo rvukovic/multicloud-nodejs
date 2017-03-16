@@ -2,9 +2,7 @@ var express = require('express');
 var router = express.Router();
 var fs = require('fs');
 var multer = require('multer');
-var upload = multer({
-    dest: 'uploads/'
-});
+var upload = multer({ dest: 'uploads/' });
 
 var cloudWrp = require('../services/cloud-wrapper');
 cloudWrp.initCloudService(); // 'azure' or 'aws'
@@ -18,28 +16,25 @@ router.get('/', function (req, res, next) {
 
 /* GET home page. */
 router.get('/newMessage', function (req, res, next) {
-    // var now = new Date().toISOString();
-    // var msgContent = 'Message ' + now;
-
-    // cloudWrp.createMessage(cloudWrp.MessageQueueName, msgContent, function (error, result, response) {
-    //     if (!error) {
-    //         console.log('Message created');
-    //     } else {
-    //         console.log('ERROR: Queue message:' + error);
-    //     }
-    // });
-     res.render('testAzure/newMsg', {
+    res.render('testAzure/newMsg', {
         title: 'Create new Message'
     });
-    //
 });
 
 router.post('/newMessage', function (req, res, next) {
     var newMsg = {
         PartitionKey: req.body.key,
-        RowKey: req.body.rowId,
+        RowKey: + new Date(),
+        callback_url: process.env['IMAGE_PROCESS_WEBHOOK'],
         description: req.body.description,
-        description2: req.body.tag,
+        source: {
+            image_name: req.body.description,
+            storage_name: cloudWrp.TableNameIn,
+        },
+        destination: {
+            image_name: req.body.description,
+            storage_name: cloudWrp.TableNameOut,
+        },
         inserted: new Date()
     };
 
@@ -90,7 +85,7 @@ router.post('/newFile', function (req, res, next) {
         inserted: new Date()
     };
 
-    cloudWrp.insertItem(cloudWrp.TableName, newRecord, function (error, result, response) {
+    cloudWrp.insertItem(cloudWrp.TableNameIn, newRecord, function (error, result, response) {
         if (!error) {
             console.log('record inserted: ' + newRecord);
             res.send('received: ' + JSON.stringify(req.body));
@@ -101,17 +96,17 @@ router.post('/newFile', function (req, res, next) {
                 result: result,
                 response: response
             };
-            res.send('ERROR: ' + JSON.stringify(err) );
+            res.send('ERROR: ' + JSON.stringify(err));
         }
     });
 
-    
+
 });
 
 
 router.get('/files', function (req, res, next) {
 
-    cloudWrp.getItemsList(cloudWrp.TableName, 100, function (error, result, response) {
+    cloudWrp.getItemsList(cloudWrp.TableNameIn, 100, function (error, result, response) {
         if (!error) {
             console.log(response.body.value);
             res.render('testAzure/files', {
