@@ -11,17 +11,18 @@ exports.aws = awsService.aws;
 var CloudName = process.env['CLOUD_SERVICE'];
 exports.CloudName = CloudName;
 
-var BoxName = process.env['BOX_STORAGE_NAME'];
-exports.BoxName = BoxName;
+var BoxNameIn = process.env['BOX_STORAGE_NAME_IN'];
+exports.BoxNameIn = BoxNameIn;
+
+var BoxNameOut = process.env['BOX_STORAGE_NAME_OUT'];
+exports.BoxNameOut = BoxNameOut;
 
 var MessageQueueName = process.env['MESSAGE_QUEUE_NAME'];
 exports.MessageQueueName = MessageQueueName;
 
-var TableNameIn = process.env['TABLE_STORAGE_NAME_IN'];
-exports.TableNameIn = TableNameIn;
+var TableName = process.env['TABLE_STORAGE_NAME'];
+exports.TableName = TableName;
 
-var TableNameOut = process.env['TABLE_STORAGE_NAME_OUT'];
-exports.TableNameOut = TableNameOut;
 
 exports.initCloudService = function () {
     switch (CloudName) {
@@ -37,8 +38,12 @@ exports.initCloudService = function () {
 };
 
 
-exports.createBoxFileFromLocalFile = function (container, blob, localFileName, callback) {
-    return _cloudSrv.createBoxFileFromLocalFile(container, blob, localFileName, callback);
+exports.createBoxFileFromLocalFile = function (box, fileName, localFileName, callback) {
+    return _cloudSrv.createBoxFileFromLocalFile(box, fileName, localFileName, callback);
+};
+
+exports.getBoxFileUrl = function (box, fileName) {
+    return _cloudSrv.getBoxFileUrl(box, fileName);
 };
 
 exports.createMessage = function (queue, messageText, callback) {

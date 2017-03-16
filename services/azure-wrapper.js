@@ -13,12 +13,16 @@ var AzureQueueService = azure.createQueueService();
 var AzureTableService = azure.createTableService();
 //exports.AzureTableService = AzureTableService;
 
-exports.createBoxFileFromLocalFile = function (container, blob, localFileName, callback) {
-    return AzureBlobService.createBlockBlobFromLocalFile(container, blob, localFileName, callback);
+exports.createBoxFileFromLocalFile = function (box, fileName, localFileName, callback) {
+    return AzureBlobService.createBlockBlobFromLocalFile(box, fileName, localFileName, callback);
+};
+
+exports.getBoxFileUrl = function (box, fileName) {
+    return AzureBlobService.getUrl(box, fileName);
 };
 
 exports.createMessage = function (queue, messageText, callback) {
-    var msgBody = new Buffer(JSON.stringify(messageText)).toString('base64');    
+    var msgBody = new Buffer(JSON.stringify(messageText)).toString('base64');
     return AzureQueueService.createMessage(queue, msgBody, callback);
 };
 
@@ -26,10 +30,10 @@ exports.getItemsList = function (tableName, itemLimit, callback) {
     // var options = {
     //     payloadFormat: 'application/json;odata=nometadata'
     // };
-    
-     var query = new azure.TableQuery().top(itemLimit);
 
-     return AzureTableService.queryEntities(tableName, query, null, null, callback);   
+    var query = new azure.TableQuery().top(itemLimit);
+
+    return AzureTableService.queryEntities(tableName, query, null, null, callback);
 };
 
 exports.insertItem = function (tableName, item, callback) {
