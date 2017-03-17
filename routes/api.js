@@ -29,9 +29,9 @@ router.post('/processImage', function (req, res, next) {
         original_url: req.body.source.url,
         original_box: req.body.source.box,
         transformed_name: req.body.destination.name,
-        transformed_url: req.body.destination.url,
+        transformed_url: '',
         transformed_box: req.body.destination.box,
-        inserted: req.body.inserted
+        submitted: req.body.inserted
     };
 
     console.log('Preparing to insert record: ' + JSON.stringify(newRecord));

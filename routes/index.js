@@ -31,7 +31,7 @@ var pushMessage = function (name, description, url) {
         description: description,
         source: {
             name: name,
-            box: cloudWrp.boxIn,
+            box: cloudWrp.BoxNameIn,
             url: url
         },
         destination: {
