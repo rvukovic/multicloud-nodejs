@@ -40,6 +40,7 @@ var pushMessage = function (name, description, url) {
         }
     };
 
+    console.log('Preparing to send Message: ' + newMsg);
     cloudWrp.createMessage(cloudWrp.MessageQueueName, newMsg, function (error, result, response) {
         if (!error) {
             console.log('Message created');

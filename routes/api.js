@@ -19,7 +19,7 @@ router.post('/test', function (req, res, next) {
     
 router.post('/processImage', function (req, res, next) {
 
-    console.log('RECEIVED: ' + req.body);    
+    console.log('Request: ' + req.body);    
     var newRecord = {
         PartitionKey: req.body.source.name,
         RowKey: req.body.timestamp,
@@ -34,6 +34,7 @@ router.post('/processImage', function (req, res, next) {
         inserted: req.body.inserted
     };
 
+    console.log('Preparing to insert record: ' + newRecord);    
     cloudWrp.insertItem(cloudWrp.TableName, newRecord, function (error, result, response) {
         if (!error) {
             console.log('record inserted: ' + newRecord);
@@ -47,6 +48,11 @@ router.post('/processImage', function (req, res, next) {
             };
             res.send('ERROR: ' + JSON.stringify(err));
         }
+    });
+
+     res.json({
+        timestamp: new Date(),
+        data: req.body
     });
 });
 
