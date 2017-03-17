@@ -13,7 +13,7 @@ cloudWrp.initCloudService(process.env['CLOUD_SERVICE']); // 'azure' or 'aws'
 
 router.get('/index', function (req, res, next) {
     cloudWrp.getItemsList(cloudWrp.TableName, 1, function(error, data){
-        res.render('aws-test/uploadFile', {
+        res.render('aws-test/index', {
             title: '',
             items: data
         });
