@@ -53,11 +53,41 @@
             </nav>
         </div>
     </header>
+
     <div class="container">
-        <h1><%= title %></h1>
-        <h3>Welcome to <%= title %></h3>
+        <form action="/aws-test/uploadFile" method="post" enctype="multipart/form-data">
+            <div class="row">
+                <label class="col-sm-2" for="name">File title</label>
+                <input class="col-sm-6" type="text" name="name" value="localTest" />
+            </div>
+            <div class="row">
+                <label class="col-sm-2" for="uploadFile">File to upload</label>
+                <input class="col-sm-8" type="file" name="uploadFile" />
+            </div>
+            <div class="row">
+                <input  type="submit" value="Upload" class="btn btn-default" />
+            </div>
+        </form>
     </div>
 
+    <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Uploaded at</th>
+                    <th>Title</th>
+                </tr>
+            </thead>
+            <tbody>
+                 <%  items.forEach(function (item) { %>
+                 <tr>
+                    <td><%= item.url %></td>
+                    <td><%= item.time %></td>
+                    <td><%= item.title %></td>
+                </tr>
+                <%  }) %>              
+            </tbody>
+        </table>
 </body>
 
 </html>

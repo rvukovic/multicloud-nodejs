@@ -56,13 +56,15 @@ function transformItem(item) {
 }
 
 exports.createMessage = function (queue, messageText, callback) {
-    var sqs = new AWS.SQS();
+    var sqs = new aws.SQS();
     var params = {
         DelaySeconds: 10,
         MessageAttributes: {},
         MessageBody: messageText,
-        QueueUrl: "https://sqs.eu-west-1.amazonaws.com/309285618281/levi9-multicloud"
+        QueueUrl: queue
     };
+
+    console.log(params);
 
     sqs.sendMessage(params, function(err, data) {
         if (err) {
