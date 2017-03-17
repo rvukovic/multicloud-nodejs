@@ -22,7 +22,7 @@ router.post('/processImage', function (req, res, next) {
     console.log('Request: ' + JSON.stringify(req.body));
     var newRecord = {
         PartitionKey: req.body.source.name,
-        RowKey: req.body.timestamp,
+        RowKey: '' + req.body.timestamp,
         callbackUrl: req.body.callbackUrl,
         description: req.body.description,
         original_name: req.body.source.name,
