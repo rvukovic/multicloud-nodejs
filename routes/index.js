@@ -11,11 +11,25 @@ cloudWrp.initCloudService(); // 'azure' or 'aws'
 
 /* GET home page. */
 router.get('/', function (req, res, next) {
-    res.render('index', {
-        title: 'Multi cloud PoC - v0.14',
-        cloudService: process.env['CLOUD_SERVICE']
-    });
+
+     cloudWrp.getItemsList(cloudWrp.TableName, 100, function (error, result, response) {
+        if (!error) {
+            console.log(response.body.value);
+            
+            res.render('index', {
+                title: 'Multi cloud PoC - v0.15',
+                cloudService: process.env['CLOUD_SERVICE'],
+                // Azure specific
+                items: response.body.value,
+            });
+        }
+     });
 });
+
+router.get('/redirect', function (req, res, next) {
+    res.redirect(307, '/');
+});
+
 
 router.get('/upload', function (req, res, next) {
     res.render('upload', {
@@ -23,7 +37,7 @@ router.get('/upload', function (req, res, next) {
     });
 });
 
-var pushMessage = function (name, description, url) {
+var pushMessage = function (name, description, url, callback) {
     var newMsg = {
         timestamp: + new Date(),
         inserted: new Date(),
@@ -44,6 +58,7 @@ var pushMessage = function (name, description, url) {
     cloudWrp.createMessage(cloudWrp.MessageQueueName, newMsg, function (error, result, response) {
         if (!error) {
             console.log('Message created');
+            callback();
         } else {
             console.log('ERROR: Queue message:' + JSON.stringify(error));
         }
@@ -51,14 +66,19 @@ var pushMessage = function (name, description, url) {
 };
 
 router.post('/upload', upload.single('uploadFile'), function (req, res, next) {
+    //NOT working !!!    
+    //res.redirect(307, '/');
+
     cloudWrp.createBoxFileFromLocalFile(cloudWrp.BoxNameIn, req.file.originalname, req.file.path,
         function (error, result, response) {
             fs.unlink(req.file.path);
             if (!error) {
                 var url = cloudWrp.getBoxFileUrl(cloudWrp.BoxNameIn, req.file.originalname);
-                pushMessage(req.file.originalname, req.body.name, url);
                 console.log('file uploaded: ' + url);
-                res.send('File uploaded: ' + url);
+                pushMessage(req.file.originalname, req.body.description, url, function () {
+                    console.log('Doing redirect ........');
+                    //res.redirect(307, '/');
+                });
             } else {
                 console.log('ERROR: blob upload: ' + error);
                 res.send('ERROR: blob upload: ' + error);
