@@ -84,6 +84,10 @@ router.get('/uploadFile', function (req, res, next) {
 });
 
 router.post('/uploadFile', upload.single('uploadFile'), function (req, res, next) {
+
+    console.log(req.body.name);
+    console.log('---------------------------------------');
+    //console.log(req.file);
     cloudWrp.createBoxFileFromLocalFile(cloudWrp.BoxNameIn, req.file.originalname, req.file.path,
         function (error, result, response) {
             fs.unlink(req.file.path);

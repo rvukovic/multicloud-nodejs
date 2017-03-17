@@ -8,7 +8,7 @@ module.exports = function (context, myQueueItem) {
         headers: {
             'content-type': 'application/json'
         },
-        url: myQueueItem.callback_url,
+        url: myQueueItem.callbackUrl,
         form: myQueueItem
     }, function (error, response, body) {
 
