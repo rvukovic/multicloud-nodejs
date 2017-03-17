@@ -7,12 +7,7 @@ module.exports = function (context, myQueueItem) {
 
     request.post({
         url: myQueueItem.callbackUrl,
-        json: true,
-        body: myQueueItem,
-        headers: {
-            'content-type': 'application/json'
-        }
-
+        json: myQueueItem,
     }, function (error, response, body) {
         if (!error && response.statusCode == 200) {
             context.log('Response: ' + JSON.stringify(body))
