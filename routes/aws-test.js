@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var fs = require('fs');
 var multer = require('multer');
-var randomstring = require("randomstring");
+var randomstring = require('randomstring');
 
 var upload = multer({
     dest: 'uploads/'
@@ -47,9 +47,9 @@ router.post('/index', upload.single('uploadFile'), function (req, res, next) {
         cloudWrp.TableName, imageNewName, uploadTimestamp, req.body.name, function(error, data, response) {
             if(error) {
                 console.log('Error saving item', error);
-                res.send('Error saving item', error)
+                res.send('Error saving item', error);
             }
-            console.log('Uploaded file save into Dynamo')
+            console.log('Uploaded file save into Dynamo');
         }
     );
 
