@@ -78,6 +78,7 @@ router.post('/upload', upload.single('uploadFile'), function (req, res, next) {
                 pushMessage(req.file.originalname, req.body.description, url, function () {
                     console.log('Doing redirect ........');
                     //res.redirect(307, '/');
+                     res.send('done');
                 });
             } else {
                 console.log('ERROR: blob upload: ' + error);
