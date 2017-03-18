@@ -70,12 +70,11 @@ function getExtension(filename) {
 }
 
 router.post('/upload', upload.single('uploadFile'), function (req, res, next) {
-
     var uploadedFile = req.file.path +'.' + getExtension(req.file.originalname);
     fs.renameSync(req.file.path, uploadedFile);
     cloudWrp.createBoxFileFromLocalFile(cloudWrp.BoxNameIn, req.file.originalname, uploadedFile,
         function (error, result, response) {
-            //fs.unlink(uploadedFile);
+            fs.unlink(uploadedFile);
             if (!error) {
                 var url = cloudWrp.getBoxFileUrl(cloudWrp.BoxNameIn, req.file.originalname);
                 console.log('file uploaded: ' + url);

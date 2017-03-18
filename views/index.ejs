@@ -109,8 +109,8 @@
                     <! -- https://embed.plnkr.co/nhlFPz -->
                     <td><%= item.RowKey %></td>
                     <td><%= item.description %></td>
-                    <td><a href="<%= item.original_url %>">Original</a></td>
-                    <td><a href="<%= item.transformed_url %>">Transformed</a></td>
+                    <td><a class="btn btn-info" href="<%= item.original_url %>" target="_blank"  data-toggle="popover" data-img="<%= item.original_url %>">Original</a></td>
+                    <td><a class="btn btn-success" href="<%= item.transformed_url %>" target="_blank"  data-toggle="popover" data-img="<%= item.original_url %>">Transformed</a></td>
                     <td><%= item.submitted.replace(/T/, ' ').replace(/\..+/, '')    %></td>
                 </tr>
                 <%  }) %>              
@@ -118,5 +118,17 @@
         </table>
      </div>
 </body>
+<script>
+    $(document).ready(function(){
+        $('[data-toggle="popover"]').popover(); 
+    });
 
+    // Add custom JS here
+    $('a[data-toggle="popover"]').popover({
+        html: true,
+        trigger: 'hover',
+      
+    content: function(){return '<img src="'+$(this).data('img') + '" width="270" />';}
+    });
+</script>
 </html>
