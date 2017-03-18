@@ -72,7 +72,7 @@
         <div class="container">
         <form class="form-horizontal" action="/upload" method="post" enctype="multipart/form-data">
             <div class="form-group">
-                <label class="control-label col-sm-2" for="description">Tag</label>
+                <label class="control-label col-sm-2" for="description">DescriptionTag</label>
                 <div class="col-sm-10">
                     <input class="form-control" type="text" name="description" value="localTest" />
                 </div>
@@ -106,11 +106,10 @@
             <tbody>
                  <%  items.forEach(function (item) { %>
                  <tr>
-                    <! -- https://embed.plnkr.co/nhlFPz -->
                     <td><%= item.RowKey %></td>
                     <td><%= item.description %></td>
                     <td><a class="btn btn-info" href="<%= item.original_url %>" target="_blank"  data-toggle="popover" data-img="<%= item.original_url %>">Original</a></td>
-                    <td><a class="btn btn-success" href="<%= item.transformed_url %>" target="_blank"  data-toggle="popover" data-img="<%= item.original_url %>">Transformed</a></td>
+                    <td><a class="btn btn-success" href="<%= item.transformed_url %>" target="_blank"  data-toggle="popover" data-img="<%= item.transformed_url %>">Transformed</a></td>
                     <td><%= item.submitted.replace(/T/, ' ').replace(/\..+/, '')    %></td>
                 </tr>
                 <%  }) %>              
