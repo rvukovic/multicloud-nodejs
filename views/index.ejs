@@ -106,11 +106,12 @@
             <tbody>
                  <%  items.forEach(function (item) { %>
                  <tr>
-                    <td><%= item.PartitionKey %></td>
-                    <td>&nbsp;</td>
+                    <! -- https://embed.plnkr.co/nhlFPz -->
+                    <td><%= item.RowKey %></td>
+                    <td><%= item.description %></td>
                     <td><a href="<%= item.original_url %>">Original</a></td>
                     <td><a href="<%= item.transformed_url %>">Transformed</a></td>
-                    <td><%= item.inserted %></td>
+                    <td><%= item.submitted.replace(/T/, ' ').replace(/\..+/, '')    %></td>
                 </tr>
                 <%  }) %>              
             </tbody>

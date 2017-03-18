@@ -12,18 +12,18 @@ cloudWrp.initCloudService(); // 'azure' or 'aws'
 /* GET home page. */
 router.get('/', function (req, res, next) {
 
-     cloudWrp.getItemsList(cloudWrp.TableName, 100, function (error, result, response) {
+    cloudWrp.getItemsList(cloudWrp.TableName, 100, function (error, result, response) {
         if (!error) {
             console.log(response.body.value);
-            
+
             res.render('index', {
-                title: 'Multi cloud PoC - v0.15',
+                title: 'Multi cloud PoC - v0.16',
                 cloudService: process.env['CLOUD_SERVICE'],
                 // Azure specific
                 items: response.body.value,
             });
         }
-     });
+    });
 });
 
 router.get('/redirect', function (req, res, next) {
@@ -65,26 +65,30 @@ var pushMessage = function (name, description, url, callback) {
     });
 };
 
-router.post('/upload', upload.single('uploadFile'), function (req, res, next) {
-    //NOT working !!!    
-    //res.redirect(307, '/');
+function getExtension(filename) {
+    return filename.split('.').pop();
+}
 
-    cloudWrp.createBoxFileFromLocalFile(cloudWrp.BoxNameIn, req.file.originalname, req.file.path,
+router.post('/upload', upload.single('uploadFile'), function (req, res, next) {
+
+    var uploadedFile = req.file.path +'.' + getExtension(req.file.originalname);
+    fs.renameSync(req.file.path, uploadedFile);
+    cloudWrp.createBoxFileFromLocalFile(cloudWrp.BoxNameIn, req.file.originalname, uploadedFile,
         function (error, result, response) {
-            fs.unlink(req.file.path);
+            //fs.unlink(uploadedFile);
             if (!error) {
                 var url = cloudWrp.getBoxFileUrl(cloudWrp.BoxNameIn, req.file.originalname);
                 console.log('file uploaded: ' + url);
                 pushMessage(req.file.originalname, req.body.description, url, function () {
                     console.log('Doing redirect ........');
-                    //res.redirect(307, '/');
-                     res.send('done');
+                    res.redirect('/');
+                    //res.send('done');
                 });
             } else {
                 console.log('ERROR: blob upload: ' + error);
                 res.send('ERROR: blob upload: ' + error);
             }
-        });  
+        });
 });
 
 
