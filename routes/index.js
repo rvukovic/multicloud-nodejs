@@ -16,7 +16,7 @@ router.get('/', function (req, res, next) {
         if (!error) {
             //console.log(data);
             res.render('index', {
-                title: 'Multi cloud PoC - v0.16',
+                title: 'Multi cloud PoC - v0.17',
                 cloudService: process.env['CLOUD_SERVICE'],
                 // Azure specific
                 items: data,
