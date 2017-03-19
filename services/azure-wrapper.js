@@ -33,7 +33,9 @@ exports.getItemsList = function (tableName, itemLimit, callback) {
 
     var query = new azure.TableQuery().top(itemLimit);
 
-    return AzureTableService.queryEntities(tableName, query, null, null, callback);
+    return AzureTableService.queryEntities(tableName, query, null, null, function (error, result, response) {
+        return callback(error, response.body.value);
+    });
 };
 
 exports.insertItem = function (tableName, item, callback) {

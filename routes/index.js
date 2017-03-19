@@ -12,15 +12,14 @@ cloudWrp.initCloudService(); // 'azure' or 'aws'
 /* GET home page. */
 router.get('/', function (req, res, next) {
 
-    cloudWrp.getItemsList(cloudWrp.TableName, 100, function (error, result, response) {
+    cloudWrp.getItemsList(cloudWrp.TableName, 100, function (error, data) {
         if (!error) {
-            console.log(response.body.value);
-
+            //console.log(data);
             res.render('index', {
                 title: 'Multi cloud PoC - v0.16',
                 cloudService: process.env['CLOUD_SERVICE'],
                 // Azure specific
-                items: response.body.value,
+                items: data,
             });
         }
     });
