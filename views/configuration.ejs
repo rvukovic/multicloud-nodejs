@@ -42,7 +42,7 @@
             <nav class="collapse navbar-collapse" role="navigation">
 
                 <ul class="nav navbar-nav">
-                  <li><a href="/configuration">Configuration</a></li> 
+                  <li><a href="/config">Configuration</a></li> 
                 </ul>
 
                 <ul class="nav navbar-right navbar-nav">
@@ -61,54 +61,21 @@
             </nav>
         </div>
     </header>
-    <div class="container">
-    <div class="page-header well">
-        <h3><strong><%= title %>&nbsp;<%= cloudService %></strong></h3>
-    </div>
-        
-    </div>
-        <div class="container">
-        <form class="form-horizontal well" action="/upload" method="post" enctype="multipart/form-data">
-            <div class="form-group">
-                <label class="control-label col-sm-2" for="description">DescriptionTag</label>
-                <div class="col-sm-10">
-                    <input class="form-control" type="text" name="description" value="localTest" />
-                </div>
-            </div>
-            <div class="form-group">
-                <label class="control-label col-sm-2" for="uploadFile">File to upload</label>
-                <div class="col-sm-10">
-                    <input class="form-control" type="file" name="uploadFile" />
-                </div>
-            </div>
-            <div class="form-group">
-                <div class="col-sm-offset-2 col-sm-10">
-                    <input type="submit" value="Upload" class="btn btn-primary" />
-                </div>
-            </div>
-
-        </form>
-    </div>
+  
 
      <div class="container">
        <table class="table table-striped table-condensed">
             <thead>
                 <tr>
-                    <th>Name</th>
-                    <th>Description</th>
-                    <th>Original</th>
-                    <th>Transformed</th>
-                    <th>Inserted</th>
+                    <th>Key</th>
+                    <th>Value</th>
                 </tr>
             </thead>
             <tbody>
                  <%  items.forEach(function (item) { %>
                  <tr>
-                    <td><%= item.RowKey %></td>
-                    <td><%= item.description %></td>
-                    <td><a class="btn btn-info" href="<%= item.original_url %>" target="_blank"  data-toggle="popover" data-img="<%= item.original_url %>">Original</a></td>
-                    <td><a class="btn btn-success" href="<%= item.transformed_url %>" target="_blank"  data-toggle="popover" data-img="<%= item.transformed_url %>">Transformed</a></td>
-                    <td><%= item.submitted.replace(/T/, ' ').replace(/\..+/, '')    %></td>
+                    <td><%= item.key %></td>
+                    <td><%= item.value %></td>
                 </tr>
                 <%  }) %>              
             </tbody>

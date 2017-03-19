@@ -26,10 +26,34 @@ router.get('/', function (req, res, next) {
     });
 });
 
-router.get('/redirect', function (req, res, next) {
-    res.redirect(307, '/');
-});
+function getBeginAndEnd(value, count) {
+     var len = value.length;
+     return value.substring(0, count) + ' ... ' + value.substring(len-count, len);
+}
 
+router.get('/configuration', function (req, res, next) {
+    var  azkey= getBeginAndEnd(process.env['AZURE_STORAGE_ACCESS_KEY'], 20);
+
+     var items = [
+         {'key': 'Cloud service', 'value' : process.env['CLOUD_SERVICE'] },
+         {'key': 'Azure Storage Account', 'value' : process.env['AZURE_STORAGE_ACCOUNT']},
+         {'key': 'Azure Key', 'value' : azkey },
+         {'key': '-------------------------------', 'value' : '----------------------------------------'},
+        //  {'key': 'AWS', 'value' : process.env[''] },
+        //  {'key': 'AWS Key', 'value' : process.env[''] },
+        //   {'key': '', 'value' : ' '},
+         {'key': 'Message Queue', 'value' : process.env['MESSAGE_QUEUE_NAME'] },
+         {'key': 'S3 / Blob Name In', 'value' : process.env['BOX_STORAGE_NAME_IN'] },
+         {'key': 'S3 / Blob Name Out', 'value' : process.env['BOX_STORAGE_NAME_OUT'] },
+         {'key': 'Azure Table / DynamoDB table', 'value' : process.env['TABLE_STORAGE_NAME'] },
+         {'key': 'Webhook URL', 'value' : process.env['IMAGE_PROCESS_WEBHOOK'] }
+     ];
+
+     res.render('configuration', {
+        title: 'Configuration',
+        items: items
+    });
+});
 
 router.get('/upload', function (req, res, next) {
     res.render('upload', {
@@ -37,7 +61,7 @@ router.get('/upload', function (req, res, next) {
     });
 });
 
-var pushMessage = function (name, description, url, callback) {
+function pushMessage(name, description, url, callback) {
     var newMsg = {
         timestamp: + new Date(),
         inserted: new Date(),
