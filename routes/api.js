@@ -36,7 +36,7 @@ router.post('/processImage', function (req, res, next) {
         transformed_url: '',
         transformed_box: req.body.destination.box,
         submitted: req.body.submitted,
-        funcBounce: req.body.submitted,
+        funcBounce: req.body.funcBounce,
         accepted: new Date(),
         processed: req.body.submitted, // will be overwritten below
         uploaded:  req.body.submitted // will be overwritten below
