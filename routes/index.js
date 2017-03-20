@@ -16,7 +16,7 @@ router.get('/', function (req, res, next) {
         if (!error) {
             //console.log(data);
             res.render('index', {
-                title: 'Multi cloud PoC - v0.17',
+                title: 'Multi cloud PoC - v0.18',
                 cloudService: process.env['CLOUD_SERVICE'],
                 // Azure specific
                 items: data,
@@ -63,7 +63,7 @@ router.get('/upload', function (req, res, next) {
 function pushMessage(name, description, url, callback) {
     var newMsg = {
         timestamp: + new Date(),
-        inserted: new Date(),
+        submitted: new Date(),
         callbackUrl: process.env['IMAGE_PROCESS_WEBHOOK'],
         description: description,
         source: {

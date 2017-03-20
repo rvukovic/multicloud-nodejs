@@ -35,7 +35,11 @@ router.post('/processImage', function (req, res, next) {
         transformed_name: req.body.destination.name,
         transformed_url: '',
         transformed_box: req.body.destination.box,
-        submitted: req.body.inserted
+        submitted: req.body.submitted,
+        funcBounce: req.body.submitted,
+        accepted: new Date(),
+        processed: req.body.submitted, // will be overwritten below
+        uploaded:  req.body.submitted // will be overwritten below
     };
 
     //var tmpName = 'uploads/' + fs.mkdtempSync('multicloud');
@@ -51,6 +55,7 @@ router.post('/processImage', function (req, res, next) {
             image.print(font, 140, 90, 'Arch9')
                 .write(tmpName, function () {
                     // save
+                    newRecord.processed = new Date();
                     cloudWrp.createBoxFileFromLocalFile(cloudWrp.BoxNameOut, origName, tmpName,
                         function (error, result, response) {
                             fs.unlink(tmpName);
@@ -58,6 +63,7 @@ router.post('/processImage', function (req, res, next) {
                                 newRecord.transformed_url = cloudWrp.getBoxFileUrl(cloudWrp.BoxNameOut, origName);
                                 console.log('file uploaded: ' + newRecord.transformed_url);
                                 console.log('Preparing to insert record: ' + JSON.stringify(newRecord));
+                                newRecord.uploaded = new Date();
                                 cloudWrp.insertItem(cloudWrp.TableName, newRecord, function (error, result, response) {
                                     if (!error) {
                                         console.log('record inserted: ' + JSON.stringify(newRecord));
