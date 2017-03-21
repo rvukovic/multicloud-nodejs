@@ -13,18 +13,16 @@ exports.createBoxFileFromLocalFile = function (container, fileName, localFileNam
         Key: fileName, 
         Body: require('fs').createReadStream(localFileName)
     };
-    s3.upload(params, callback);
+    s3.upload(params, (error, data)=>{
+        callback(error, {url : data.Location});
+    });
 };
 
-exports.insertItem = function (tableName, key, timestamp, title, callback) {
+exports.insertItem = function (tableName, item, callback) {
     var documentClient = new aws.DynamoDB.DocumentClient();
     var params = {
         TableName: tableName,
-        Item: {
-            'key': key,
-            'timestamp': timestamp,
-            'title': title
-        } 
+        Item: item
     };
     documentClient.put(params, callback);
 };
@@ -41,26 +39,18 @@ exports.getItemsList = function (tableName, itemLimit, callback) {
         } else {
             console.log('GetItem succeeded:', JSON.stringify(data, null, 2));
         }
-        callback(err, data.Items.map(transformItem));
+        callback(err, data.Items);
     });
     
 };
 
-function transformItem(item) {
-    return {
-        'url': item.key, 
-        'url-transformed': item.key,
-        'time': new Date(item.timestamp),
-        'title': item.title 
-    };
-}
-
 exports.createMessage = function (queue, messageText, callback) {
     var sqs = new aws.SQS();
+    var msgBody = JSON.stringify(messageText);
     var params = {
         DelaySeconds: 10,
         MessageAttributes: {},
-        MessageBody: messageText,
+        MessageBody: msgBody,
         QueueUrl: queue
     };
 
@@ -75,5 +65,4 @@ exports.createMessage = function (queue, messageText, callback) {
         callback(err, data);
     });
 
-    
 };

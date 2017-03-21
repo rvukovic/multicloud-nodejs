@@ -50,8 +50,8 @@ exports.getItemsList = function (tableName, itemLimit, callback) {
     return _cloudSrv.getItemsList(tableName, itemLimit, callback);
 };
 
-exports.insertItem = function (tableName, key, timestamp, item, callback) {
-    return _cloudSrv.insertItem(tableName, key, timestamp, item, callback);
+exports.insertItem = function (tableName, item, callback) {
+    return _cloudSrv.insertItem(tableName, item, callback);
 };
 
 //http://gauravmantri.com/2012/04/30/comparing-windows-azure-table-storage-and-amazon-dynamodb/

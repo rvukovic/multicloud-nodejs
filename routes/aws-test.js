@@ -29,7 +29,6 @@ router.post('/index', upload.single('uploadFile'), function (req, res, next) {
     var imageNewName = generateUniqueFileName(req.file.originalname);
     var uploadTimestamp = (new Date()).getTime();
 
-
     //1. Save in S3
     cloudWrp.createBoxFileFromLocalFile(
         cloudWrp.BoxNameIn, imageNewName, filePath,
@@ -39,6 +38,7 @@ router.post('/index', upload.single('uploadFile'), function (req, res, next) {
                 console.log('Error uploading to S3: ' + error);
                 res.send('Error uploading to S3: ' + error);
             }
+            console.log('Uploaded to S3');
         }
     );
 
@@ -57,6 +57,7 @@ router.post('/index', upload.single('uploadFile'), function (req, res, next) {
     var newMessage = {
         timestamp: + new Date(),
         callbackUrl: process.env['IMAGE_PROCESS_WEBHOOK'],
+        myUrl: 'http://test.com/qwet',
         name: imageNewName,
         uploadTimestamp: uploadTimestamp, 
         source: {
