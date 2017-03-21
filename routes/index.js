@@ -16,7 +16,7 @@ router.get('/', function (req, res, next) {
         if (!error) {
             //console.log(data);
             res.render('index', {
-                title: 'Multi cloud PoC - v0.19',
+                title: 'Multi cloud PoC - v0.20',
                 cloudService: process.env['CLOUD_SERVICE'],
                 // Azure specific
                 items: data,
@@ -86,7 +86,7 @@ function pushMessage(name, description, url, callback) {
             console.log('ERROR: Queue message:' + JSON.stringify(error));
         }
     });
-};
+}
 
 function getExtension(filename) {
     return filename.split('.').pop();
@@ -96,10 +96,10 @@ router.post('/upload', upload.single('uploadFile'), function (req, res, next) {
     var uploadedFile = req.file.path +'.' + getExtension(req.file.originalname);
     fs.renameSync(req.file.path, uploadedFile);
     cloudWrp.createBoxFileFromLocalFile(cloudWrp.BoxNameIn, req.file.originalname, uploadedFile,
-        function (error, result, response) {
+        function (error, data ) {
             fs.unlink(uploadedFile);
             if (!error) {
-                var url = cloudWrp.getBoxFileUrl(cloudWrp.BoxNameIn, req.file.originalname);
+                var url = data.url;
                 console.log('file uploaded: ' + url);
                 pushMessage(req.file.originalname, req.body.description, url, function () {
                     console.log('Doing redirect ........');

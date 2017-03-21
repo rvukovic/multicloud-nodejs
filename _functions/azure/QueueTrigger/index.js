@@ -6,7 +6,6 @@ module.exports = function (context, myQueueItem) {
     context.log('Request: ' + JSON.stringify(myQueueItem));
 
     myQueueItem.funcBounce = new Date();
-    myQueueItem.funcMsgInsert = context.bindingData.insertionTime;
 
     request.post({
         url: myQueueItem.callbackUrl,

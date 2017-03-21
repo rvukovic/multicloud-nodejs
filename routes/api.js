@@ -57,10 +57,10 @@ router.post('/processImage', function (req, res, next) {
                     // save
                     newRecord.processed = new Date();
                     cloudWrp.createBoxFileFromLocalFile(cloudWrp.BoxNameOut, origName, tmpName,
-                        function (error, result, response) {
+                        function (error, data) {
                             fs.unlink(tmpName);
                             if (!error) {
-                                newRecord.transformed_url = cloudWrp.getBoxFileUrl(cloudWrp.BoxNameOut, origName);
+                                newRecord.transformed_url = data.url;
                                 console.log('file uploaded: ' + newRecord.transformed_url);
                                 console.log('Preparing to insert record: ' + JSON.stringify(newRecord));
                                 newRecord.uploaded = new Date();

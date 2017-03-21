@@ -14,11 +14,12 @@ var AzureTableService = azure.createTableService();
 //exports.AzureTableService = AzureTableService;
 
 exports.createBoxFileFromLocalFile = function (box, fileName, localFileName, callback) {
-    return AzureBlobService.createBlockBlobFromLocalFile(box, fileName, localFileName, callback);
-};
 
-exports.getBoxFileUrl = function (box, fileName) {
-    return AzureBlobService.getUrl(box, fileName);
+    return AzureBlobService.createBlockBlobFromLocalFile(box, fileName, localFileName, function (error, result, response) {
+        return callback(error, {
+            url: AzureBlobService.getUrl(box, fileName)
+        } /*, result, response */);    
+    });
 };
 
 exports.createMessage = function (queue, messageText, callback) {

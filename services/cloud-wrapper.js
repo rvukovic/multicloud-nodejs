@@ -42,10 +42,6 @@ exports.createBoxFileFromLocalFile = function (box, fileName, localFileName, cal
     return _cloudSrv.createBoxFileFromLocalFile(box, fileName, localFileName, callback);
 };
 
-exports.getBoxFileUrl = function (box, fileName) {
-    return _cloudSrv.getBoxFileUrl(box, fileName);
-};
-
 exports.createMessage = function (queue, messageText, callback) {
     return _cloudSrv.createMessage(queue, messageText, callback);
 };
