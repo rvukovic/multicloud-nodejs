@@ -14,12 +14,15 @@ router.get('/', function (req, res, next) {
 
     cloudWrp.getItemsList(cloudWrp.TableName, 100, function (error, data) {
         if (!error) {
-            //console.log(data);
-            data.timing = JSON.parse(data.timingStr || '{}');
+            console.log(data.timingStr);
+            data.map(function(item) {
+                item.timing = JSON.parse(item.timingStr);
+            })
+
+            console.log(data);
             res.render('index', {
-                title: 'Multi cloud PoC - v0.22',
+                title: 'Multi cloud PoC - v0.23',
                 cloudService: process.env['CLOUD_SERVICE'],
-                // Azure specific
                 items: data,
                 success: req.flash('success'),
                 error: req.flash('error'),
