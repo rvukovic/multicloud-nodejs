@@ -100,10 +100,6 @@
                     <th>Transformed</th>
                     <th>Submitted</th>
                     <th>Function</th>
-                    <th>Callback</th>
-                    <th>Process</th>
-                    <th>Upload</th>
-                    <th>Total</th>
                 </tr>
             </thead>
             <tbody>
@@ -115,10 +111,6 @@
                     <td><a class="btn btn-success" href="<%= item.transformed_url %>" target="_blank"  data-toggle="popover" data-img="<%= item.transformed_url %>">Transformed</a></td>
                     <td><%= item.submitted.replace(/T/, ' ').replace(/\..+/, '')    %></td>
                     <td><%= Date.parse(item.funcBounce) - Date.parse(item.submitted)    %></td>
-                    <td><%= Date.parse(item.accepted) - Date.parse(item.funcBounce)    %></td>
-                    <td><%= Date.parse(item.processed) - Date.parse(item.accepted)    %></td>
-                    <td><%= Date.parse(item.uploaded) - Date.parse(item.processed)    %></td>
-                    <td><%= Date.parse(item.uploaded) - Date.parse(item.submitted)    %></td>
                 </tr>
                 <%  }) %>              
             </tbody>
