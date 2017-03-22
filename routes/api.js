@@ -6,7 +6,6 @@ var cloudWrp = require('../services/cloud-wrapper');
 cloudWrp.initCloudService();
 var Path = require('path');
 
-/* GET home page. */
 router.get('/', function (req, res, next) {
     res.json({ message: 'multicloud API' });
 });
@@ -24,6 +23,14 @@ router.post('/processImage', function (req, res, next) {
 
     var origName = req.body.source.name;
 
+    var timing = {
+        submitted: req.body.submitted,
+        funcBounce: req.body.funcBounce,
+        accepted: new Date(),
+        processed: req.body.submitted, // will be overwritten below
+        uploaded: req.body.submitted // will be overwritten below
+    };
+
     var newRecord = {
         PartitionKey: '' + req.body.timestamp,
         RowKey: origName,
@@ -34,12 +41,9 @@ router.post('/processImage', function (req, res, next) {
         original_box: req.body.source.box,
         transformed_name: req.body.destination.name,
         transformed_url: '',
-        transformed_box: req.body.destination.box,
-        submitted: req.body.submitted,
-        funcBounce: req.body.funcBounce
+        transformed_box: req.body.destination.box
     };
 
-    //var tmpName = 'uploads/' + fs.mkdtempSync('multicloud');
     var tmpName = 'uploads/' + req.body.timestamp + '-' + origName;
     console.log('Using temp file: ' + tmpName);
     jimp.read(req.body.source.url).then(function (image) {
@@ -51,7 +55,7 @@ router.post('/processImage', function (req, res, next) {
         jimp.loadFont(Path.join(__dirname, '../fonts/arch9/arch9.fnt')).then(function (font) {
             image.print(font, 140, 90, 'Arch9')
                 .write(tmpName, function () {
-                    // save
+                    timing.processed = new Date();
                     cloudWrp.createBoxFileFromLocalFile(cloudWrp.BoxNameOut, origName, tmpName,
                         function (error, data) {
                             fs.unlink(tmpName);
@@ -59,6 +63,8 @@ router.post('/processImage', function (req, res, next) {
                                 newRecord.transformed_url = data.url;
                                 console.log('file uploaded: ' + newRecord.transformed_url);
                                 console.log('Preparing to insert record: ' + JSON.stringify(newRecord));
+                                timing.uploaded = new Date();
+                                newRecord.timingStr = JSON.stringify(timing)
                                 cloudWrp.insertItem(cloudWrp.TableName, newRecord, function (error, result, response) {
                                     if (!error) {
                                         console.log('record inserted: ' + JSON.stringify(newRecord));

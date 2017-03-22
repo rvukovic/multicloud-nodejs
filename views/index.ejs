@@ -62,17 +62,32 @@
         </div>
     </header>
     <div class="container">
-    <div class="page-header well">
-        <h3><strong><%= title %>&nbsp;<%= cloudService %></strong></h3>
+        <div class="page-header well">
+            <h3><strong><%= title %>&nbsp;<%= cloudService %></strong></h3>
+        </div>
     </div>
-        
+    <%  if(success != '') { %>
+    <div class="container">
+        <div class="alert alert-success">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong><%= success %></strong>
+        </div>
     </div>
-        <div class="container">
+    <%  } %>
+    <%  if(error != '') { %>
+      <div class="container">
+        <div class="alert alert-danger">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong><%= error %></strong>
+        </div>
+    </div>
+    <%  } %>
+    <div class="container">
         <form class="form-horizontal well" action="/upload" method="post" enctype="multipart/form-data">
             <div class="form-group">
-                <label class="control-label col-sm-2" for="description">DescriptionTag</label>
+                <label class="control-label col-sm-2" for="description">Description</label>
                 <div class="col-sm-10">
-                    <input class="form-control" type="text" name="description" value="localTest" />
+                    <input class="form-control" type="text" name="description" value="" />
                 </div>
             </div>
             <div class="form-group">
@@ -100,6 +115,10 @@
                     <th>Transformed</th>
                     <th>Submitted</th>
                     <th>Function</th>
+                    <th>Callback</th>
+                    <th>Process</th>
+                    <th>Upload</th>
+                    <th>Total</th>
                 </tr>
             </thead>
             <tbody>
@@ -109,8 +128,12 @@
                     <td><%= item.description %></td>
                     <td><a class="btn btn-info" href="<%= item.original_url %>" target="_blank"  data-toggle="popover" data-img="<%= item.original_url %>">Original</a></td>
                     <td><a class="btn btn-success" href="<%= item.transformed_url %>" target="_blank"  data-toggle="popover" data-img="<%= item.transformed_url %>">Transformed</a></td>
-                    <td><%= item.submitted.replace(/T/, ' ').replace(/\..+/, '')    %></td>
-                    <td><%= Date.parse(item.funcBounce) - Date.parse(item.submitted)    %></td>
+                    <td><%= item.timing.submitted.replace(/T/, ' ').replace(/\..+/, '')    %></td>
+                    <td><%= Date.parse(item.timing.funcBounce) - Date.parse(item.timing.submitted)    %></td>
+                    <td><%= Date.parse(item.timing.accepted) - Date.parse(item.timing.funcBounce)    %></td>
+                    <td><%= Date.parse(item.timing.processed) - Date.parse(item.timing.accepted)    %></td>
+                    <td><%= Date.parse(item.timing.uploaded) - Date.parse(item.timing.processed)    %></td>
+                    <td><%= Date.parse(item.timing.uploaded) - Date.parse(item.timing.submitted)    %></td>
                 </tr>
                 <%  }) %>              
             </tbody>
@@ -129,5 +152,10 @@
       
     content: function(){return '<img src="'+$(this).data('img') + '" width="240" />';}
     });
+
+    $(".alert").delay(3000).slideUp(200, function() {
+        $(this).alert('close');
+    });
+
 </script>
 </html>

@@ -4,6 +4,8 @@ var favicon = require('serve-favicon');
 var logger = require('morgan');
 var cookieParser = require('cookie-parser');
 var bodyParser = require('body-parser');
+var session = require('express-session');
+var flash = require('connect-flash');
 
 require('dotenv').config();
 
@@ -24,6 +26,13 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(require('less-middleware')(path.join(__dirname, 'public')));
 app.use(express.static(path.join(__dirname, 'public')));
+app.use(session({ cookie: { maxAge: 60000 }, 
+                  secret: 'woot',
+                  resave: false, 
+                  saveUninitialized: false
+}));
+                  
+app.use(flash());
 
 app.use('/', index);
 app.use('/api', api);
