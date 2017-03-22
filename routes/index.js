@@ -15,6 +15,7 @@ router.get('/', function (req, res, next) {
     cloudWrp.getItemsList(cloudWrp.TableName, 100, function (error, data) {
         if (!error) {
             //console.log(data);
+            data.timing = JSON.parse(data.timingStr || '{}');
             res.render('index', {
                 title: 'Multi cloud PoC - v0.22',
                 cloudService: process.env['CLOUD_SERVICE'],
