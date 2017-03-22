@@ -16,10 +16,12 @@ router.get('/', function (req, res, next) {
         if (!error) {
             //console.log(data);
             res.render('index', {
-                title: 'Multi cloud PoC - v0.21',
+                title: 'Multi cloud PoC - v0.22',
                 cloudService: process.env['CLOUD_SERVICE'],
                 // Azure specific
                 items: data,
+                success: req.flash('success'),
+                error: req.flash('error'),
             });
         }
     });
@@ -51,12 +53,6 @@ router.get('/configuration', function (req, res, next) {
      res.render('configuration', {
         title: 'Configuration',
         items: items
-    });
-});
-
-router.get('/upload', function (req, res, next) {
-    res.render('upload', {
-        title: 'Upload image'
     });
 });
 
@@ -103,11 +99,13 @@ router.post('/upload', upload.single('uploadFile'), function (req, res, next) {
                 console.log('file uploaded: ' + url);
                 pushMessage(req.file.originalname, req.body.description, url, function () {
                     console.log('Doing redirect ........');
+                    req.flash('success', 'File ' + req.file.originalname + ' uploaded successfully');
                     res.redirect('/');
                     //res.send('done');
                 });
             } else {
                 console.log('ERROR: blob upload: ' + error);
+                req.flash('error:','ERROR: ' + error);
                 res.send('ERROR: blob upload: ' + error);
             }
         });

@@ -62,17 +62,32 @@
         </div>
     </header>
     <div class="container">
-    <div class="page-header well">
-        <h3><strong><%= title %>&nbsp;<%= cloudService %></strong></h3>
+        <div class="page-header well">
+            <h3><strong><%= title %>&nbsp;<%= cloudService %></strong></h3>
+        </div>
     </div>
-        
+    <%  if(success != '') { %>
+    <div class="container">
+        <div class="alert alert-success">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong><%= success %></strong>
+        </div>
     </div>
-        <div class="container">
+    <%  } %>
+    <%  if(error != '') { %>
+      <div class="container">
+        <div class="alert alert-danger">
+            <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+            <strong><%= error %></strong>
+        </div>
+    </div>
+    <%  } %>
+    <div class="container">
         <form class="form-horizontal well" action="/upload" method="post" enctype="multipart/form-data">
             <div class="form-group">
-                <label class="control-label col-sm-2" for="description">DescriptionTag</label>
+                <label class="control-label col-sm-2" for="description">Description</label>
                 <div class="col-sm-10">
-                    <input class="form-control" type="text" name="description" value="localTest" />
+                    <input class="form-control" type="text" name="description" value="" />
                 </div>
             </div>
             <div class="form-group">
@@ -137,5 +152,10 @@
       
     content: function(){return '<img src="'+$(this).data('img') + '" width="240" />';}
     });
+
+    $(".alert").delay(3000).slideUp(200, function() {
+        $(this).alert('close');
+    });
+
 </script>
 </html>
