@@ -2,10 +2,12 @@ var express = require('express');
 var router = express.Router();
 var jimp = require('jimp');
 var fs = require('fs');
+var waterfall = require('async-waterfall');
 var cloudWrp = require('../services/cloud-wrapper');
 cloudWrp.initCloudService();
 var Path = require('path');
 
+/* GET home page. */
 router.get('/', function (req, res, next) {
     res.json({ message: 'multicloud API' });
 });
@@ -21,84 +23,76 @@ router.post('/processImage', function (req, res, next) {
 
     console.log('Request: ' + JSON.stringify(req.body));
 
-    var origName = req.body.source.name;
-
-    var timing = {
-        submitted: req.body.submitted,
-        funcBounce: req.body.funcBounce,
-        accepted: new Date(),
-        processed: req.body.submitted, // will be overwritten below
-        uploaded: req.body.submitted // will be overwritten below
-    };
-
-    var newRecord = {
-        PartitionKey: '' + req.body.timestamp,
-        RowKey: origName,
-        callbackUrl: req.body.callbackUrl,
-        description: req.body.description,
-        original_name: origName,
-        original_url: req.body.source.url,
-        original_box: req.body.source.box,
-        transformed_name: req.body.destination.name,
-        transformed_url: '',
-        transformed_box: req.body.destination.box
-    };
-
-    var tmpName = 'uploads/' + req.body.timestamp + '-' + origName;
-    console.log('Using temp file: ' + tmpName);
-    jimp.read(req.body.source.url).then(function (image) {
-        image.resize(jimp.AUTO, 240)            // resize
-            .quality(60)                 // set JPEG quality
-            .greyscale();                 // set greyscale
-        //jimp.loadFont(jimp.FONT_SANS_64_WHITE).then(function (font) {
-        // creating new FONTS http://kvazars.com/littera/
-        jimp.loadFont(Path.join(__dirname, '../fonts/arch9/arch9.fnt')).then(function (font) {
-            image.print(font, 140, 90, 'Arch9')
-                .write(tmpName, function () {
-                    timing.processed = new Date();
-                    cloudWrp.createBoxFileFromLocalFile(cloudWrp.BoxNameOut, origName, tmpName,
-                        function (error, data) {
-                            fs.unlink(tmpName);
-                            if (!error) {
-                                newRecord.transformed_url = data.url;
-                                console.log('file uploaded: ' + newRecord.transformed_url);
-                                console.log('Preparing to insert record: ' + JSON.stringify(newRecord));
-                                timing.uploaded = new Date();
-                                newRecord.timingStr = JSON.stringify(timing)
-                                cloudWrp.insertItem(cloudWrp.TableName, newRecord, function (error, result, response) {
-                                    if (!error) {
-                                        console.log('record inserted: ' + JSON.stringify(newRecord));
-                                        res.json({
-                                            timestamp: new Date(),
-                                            message: 'record inserted',
-                                            data: newRecord
-                                        });
-
-                                    } else {
-                                        console.log('ERROR: ' + error);
-                                        var err = {
-                                            error: error,
-                                            result: result,
-                                            response: response
-                                        };
-                                        res.json({
-                                            timestamp: new Date(),
-                                            message: 'Error inserting record in the table',
-                                            data: err
-                                        });
-                                    }
-                                });
-                            } else {
-                                console.log('ERROR: blob upload: ' + error);
-                                res.send('ERROR: blob upload: ' + error);
-                            }
-                        });
-
-                });
-        });
-    }).catch(function (err) {
-        console.log(err);
+    waterfall([
+        (callback) => { transformImage(req.body, callback) },
+        uploadToObjectStore,
+        saveToDocumentDb
+    ], 
+        (error, data, response) => {
+        if (error) {
+            console.log('ERROR: ' + error); 
+            res.json({
+                timestamp: new Date(),
+                message: 'Error inserting record in the table',
+                data: {
+                    error: error, result: result, response: response
+                }
+            });
+        } 
+        
+        res.json({timestamp: new Date(), message: 'record inserted', data: data});
     });
+    
 });
+
+function transformImage(requestJson, callback) {
+    var imagePath = 'uploads/' + requestJson.timestamp + '-' + requestJson.source.name;
+    console.log('Using temp file: ' + imagePath);
+    jimp.loadFont(Path.join(__dirname, '../fonts/arch9/arch9.fnt')).then((font) => {
+        //console.log('Read image', req.body.source.url, ' Callback image ', image);
+        jimp.read(requestJson.source.url).then((image) => {
+            image.resize(jimp.AUTO, 240).quality(60).greyscale((error, image) => {
+                image.print(font, 140, 90, 'Arch9').write(imagePath, (error, data) => {
+                    callback(null, requestJson, imagePath)
+                });
+            });
+        });
+    }).catch((error) => {
+        fs.unlink(imagePath);
+        console.error(error);
+        callback(error);
+    });
+}
+
+function uploadToObjectStore(requestJson, imagePath, callback) {
+    cloudWrp.createBoxFileFromLocalFile(cloudWrp.BoxNameOut, requestJson.source.name, imagePath, (error, data)=>{
+        console.log('File uploaded: ' + imagePath);
+        fs.unlink(imagePath);
+        callback(error, requestJson, data.url);
+    });
+}
+
+function saveToDocumentDb(requestJson, url, callback) {
+    var newRecord = {
+        PartitionKey: requestJson.timestamp.toString(), 
+        RowKey: requestJson.source.name,
+        callbackUrl: requestJson.callbackUrl,
+        description: requestJson.description,
+        original_name: requestJson.source.name,
+        original_url: requestJson.source.url,
+        original_box: requestJson.source.box,
+        transformed_name: requestJson.destination.name,
+        transformed_url: url,
+        transformed_box: requestJson.destination.box,
+        submitted: requestJson.submitted,
+        funcBounce: requestJson.funcBounce
+    };
+
+    console.log('Preparing to insert record: ' + JSON.stringify(newRecord));
+    cloudWrp.insertItem(cloudWrp.TableName, newRecord, (error, data) => {
+        console.log('Record inserted: ' + JSON.stringify(newRecord));
+        callback(error, newRecord);
+    });
+}
 
 module.exports = router;
