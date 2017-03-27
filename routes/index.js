@@ -21,7 +21,7 @@ router.get('/', function (req, res, next) {
 
             console.log(data);
             res.render('index', {
-                title: 'Multi cloud PoC - v0.23',
+                title: 'Multi cloud PoC - v0.24',
                 cloudService: process.env['CLOUD_SERVICE'],
                 items: data,
                 success: req.flash('success'),

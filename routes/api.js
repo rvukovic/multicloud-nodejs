@@ -23,8 +23,16 @@ router.post('/processImage', function (req, res, next) {
 
     console.log('Request: ' + JSON.stringify(req.body));
 
+    var timings = {
+        submitted: req.body.submitted,
+        funcBounce: req.body.funcBounce,
+        accepted: new Date(),
+        processed: new Date(),
+        uploaded: new Date()
+    }
+
     waterfall([
-        (callback) => { transformImage(req.body, callback) },
+        (callback) => { transformImage(req.body, timings, callback) }, 
         uploadToObjectStore,
         saveToDocumentDb
     ], 
@@ -45,7 +53,7 @@ router.post('/processImage', function (req, res, next) {
     
 });
 
-function transformImage(requestJson, callback) {
+function transformImage(requestJson, timings, callback) {
     var imagePath = 'uploads/' + requestJson.timestamp + '-' + requestJson.source.name;
     console.log('Using temp file: ' + imagePath);
     jimp.loadFont(Path.join(__dirname, '../fonts/arch9/arch9.fnt')).then((font) => {
@@ -53,7 +61,8 @@ function transformImage(requestJson, callback) {
         jimp.read(requestJson.source.url).then((image) => {
             image.resize(jimp.AUTO, 240).quality(60).greyscale((error, image) => {
                 image.print(font, 140, 90, 'Arch9').write(imagePath, (error, data) => {
-                    callback(null, requestJson, imagePath)
+                    timings.processed = new Date();
+                    callback(null, requestJson, timings, imagePath)
                 });
             });
         });
@@ -64,15 +73,16 @@ function transformImage(requestJson, callback) {
     });
 }
 
-function uploadToObjectStore(requestJson, imagePath, callback) {
+function uploadToObjectStore(requestJson, timings, imagePath, callback) {
     cloudWrp.createBoxFileFromLocalFile(cloudWrp.BoxNameOut, requestJson.source.name, imagePath, (error, data)=>{
         console.log('File uploaded: ' + imagePath);
+        timings.uploaded = new Date();
         fs.unlink(imagePath);
-        callback(error, requestJson, data.url);
+        callback(error, requestJson, timings, data.url);
     });
 }
 
-function saveToDocumentDb(requestJson, url, callback) {
+function saveToDocumentDb(requestJson, timings, url, callback) {
     var newRecord = {
         PartitionKey: requestJson.timestamp.toString(), 
         RowKey: requestJson.source.name,
@@ -84,8 +94,7 @@ function saveToDocumentDb(requestJson, url, callback) {
         transformed_name: requestJson.destination.name,
         transformed_url: url,
         transformed_box: requestJson.destination.box,
-        submitted: requestJson.submitted,
-        funcBounce: requestJson.funcBounce
+        timingStr: JSON.stringify(timings)
     };
 
     console.log('Preparing to insert record: ' + JSON.stringify(newRecord));
