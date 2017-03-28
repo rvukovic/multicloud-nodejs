@@ -2,19 +2,11 @@ var azure = require('azure-storage');
 
 var exports = module.exports;
 
-exports.azure = azure;
-
 var AzureBlobService = azure.createBlobService();
-//exports.AzureBlobService = AzureBlobService;
-
 var AzureQueueService = azure.createQueueService();
-//exports.AzureQueueService = AzureQueueService;
-
 var AzureTableService = azure.createTableService();
-//exports.AzureTableService = AzureTableService;
 
 exports.createBoxFileFromLocalFile = function (box, fileName, localFileName, callback) {
-
     return AzureBlobService.createBlockBlobFromLocalFile(box, fileName, localFileName, function (error, result, response) {
         return callback(error, {
             url: AzureBlobService.getUrl(box, fileName)
@@ -28,10 +20,6 @@ exports.createMessage = function (queue, messageText, callback) {
 };
 
 exports.getItemsList = function (tableName, itemLimit, callback) {
-    // var options = {
-    //     payloadFormat: 'application/json;odata=nometadata'
-    // };
-
     var query = new azure.TableQuery().top(itemLimit);
 
     return AzureTableService.queryEntities(tableName, query, null, null, function (error, result, response) {

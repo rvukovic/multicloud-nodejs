@@ -1,7 +1,7 @@
 var aws = require('aws-sdk');
 
 aws.config.update({
-  region: 'eu-west-1'
+    region: 'eu-west-1'
 });
 
 var exports = module.exports;
@@ -9,12 +9,12 @@ var exports = module.exports;
 exports.createBoxFileFromLocalFile = function (container, fileName, localFileName, callback) {
     var s3 = new aws.S3();
     var params = {
-        Bucket: container, 
-        Key: fileName, 
+        Bucket: container,
+        Key: fileName,
         Body: require('fs').createReadStream(localFileName)
     };
-    s3.upload(params, (error, data)=>{
-        callback(error, {url : data.Location});
+    s3.upload(params, (error, data) => {
+        callback(error, { url: data.Location });
     });
 };
 
@@ -32,8 +32,8 @@ exports.getItemsList = function (tableName, itemLimit, callback) {
     var params = {
         TableName: tableName
     };
-    
-    documentClient.scan(params, function(err, data) {
+
+    documentClient.scan(params, function (err, data) {
         if (err) {
             console.error('Unable to read item. Error JSON:', JSON.stringify(err, null, 2));
         } else {
@@ -41,7 +41,7 @@ exports.getItemsList = function (tableName, itemLimit, callback) {
         }
         callback(err, data.Items);
     });
-    
+
 };
 
 exports.createMessage = function (queue, messageText, callback) {
@@ -56,7 +56,7 @@ exports.createMessage = function (queue, messageText, callback) {
 
     console.log(params);
 
-    sqs.sendMessage(params, function(err, data) {
+    sqs.sendMessage(params, function (err, data) {
         if (err) {
             console.log('Error', err);
         } else {

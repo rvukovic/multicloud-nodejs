@@ -6,7 +6,7 @@ var upload = multer({ dest: 'uploads/' });
 
 
 var cloudWrp = require('../services/cloud-wrapper');
-cloudWrp.initCloudService(); // 'azure' or 'aws'
+cloudWrp.initCloudService(); 
 
 
 /* GET home page. */
@@ -21,7 +21,7 @@ router.get('/', function (req, res, next) {
 
             console.log(data);
             res.render('index', {
-                title: 'Multi cloud PoC - v0.24',
+                title: 'Multi cloud PoC - v0.25',
                 cloudService: process.env['CLOUD_SERVICE'],
                 items: data,
                 success: req.flash('success'),
@@ -44,9 +44,6 @@ router.get('/configuration', function (req, res, next) {
          {'key': 'Azure Storage Account', 'value' : process.env['AZURE_STORAGE_ACCOUNT']},
          {'key': 'Azure Key', 'value' : azkey },
          {'key': '-------------------------------', 'value' : '----------------------------------------'},
-        //  {'key': 'AWS', 'value' : process.env[''] },
-        //  {'key': 'AWS Key', 'value' : process.env[''] },
-        //   {'key': '', 'value' : ' '},
          {'key': 'Message Queue', 'value' : process.env['MESSAGE_QUEUE_NAME'] },
          {'key': 'S3 / Blob Name In', 'value' : process.env['BOX_STORAGE_NAME_IN'] },
          {'key': 'S3 / Blob Name Out', 'value' : process.env['BOX_STORAGE_NAME_OUT'] },
@@ -93,6 +90,10 @@ function getExtension(filename) {
 }
 
 router.post('/upload', upload.single('uploadFile'), function (req, res, next) {
+    if (!req.file) {
+        res.redirect('/');
+    }    
+
     var uploadedFile = req.file.path +'.' + getExtension(req.file.originalname);
     fs.renameSync(req.file.path, uploadedFile);
     cloudWrp.createBoxFileFromLocalFile(cloudWrp.BoxNameIn, req.file.originalname, uploadedFile,
@@ -105,7 +106,6 @@ router.post('/upload', upload.single('uploadFile'), function (req, res, next) {
                     console.log('Doing redirect ........');
                     req.flash('success', 'File ' + req.file.originalname + ' uploaded successfully');
                     res.redirect('/');
-                    //res.send('done');
                 });
             } else {
                 console.log('ERROR: blob upload: ' + error);
@@ -114,6 +114,5 @@ router.post('/upload', upload.single('uploadFile'), function (req, res, next) {
             }
         });
 });
-
 
 module.exports = router;

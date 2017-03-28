@@ -57,10 +57,9 @@ function transformImage(requestJson, timings, callback) {
     var imagePath = 'uploads/' + requestJson.timestamp + '-' + requestJson.source.name;
     console.log('Using temp file: ' + imagePath);
     jimp.loadFont(Path.join(__dirname, '../fonts/arch9/arch9.fnt')).then((font) => {
-        //console.log('Read image', req.body.source.url, ' Callback image ', image);
         jimp.read(requestJson.source.url).then((image) => {
             image.resize(jimp.AUTO, 240).quality(60).greyscale((error, image) => {
-                image.print(font, 140, 90, 'Arch9').write(imagePath, (error, data) => {
+                image.print(font, 100, 90, 'Arch9').write(imagePath, (error, data) => {
                     timings.processed = new Date();
                     callback(null, requestJson, timings, imagePath)
                 });

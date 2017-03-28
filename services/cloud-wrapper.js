@@ -5,9 +5,6 @@ var exports = module.exports;
 
 var _cloudSrv;
 
-exports.azure = azureService.azure;
-exports.aws = awsService.aws;
-
 var CloudName = process.env['CLOUD_SERVICE'];
 exports.CloudName = CloudName;
 
@@ -37,7 +34,6 @@ exports.initCloudService = function () {
     }
 };
 
-
 exports.createBoxFileFromLocalFile = function (box, fileName, localFileName, callback) {
     return _cloudSrv.createBoxFileFromLocalFile(box, fileName, localFileName, callback);
 };
@@ -53,5 +49,3 @@ exports.getItemsList = function (tableName, itemLimit, callback) {
 exports.insertItem = function (tableName, item, callback) {
     return _cloudSrv.insertItem(tableName, item, callback);
 };
-
-//http://gauravmantri.com/2012/04/30/comparing-windows-azure-table-storage-and-amazon-dynamodb/
