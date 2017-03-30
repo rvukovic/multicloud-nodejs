@@ -1,0 +1,14 @@
+{
+  "name": "process-sqs",
+  "version": "1.0.0",
+  "description": "AWS function for Polling SQS",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Slobodan Bogdanovic",
+  "license": "ISC",
+  "dependencies": {
+    "request": "^2.81.0"
+  }
+}

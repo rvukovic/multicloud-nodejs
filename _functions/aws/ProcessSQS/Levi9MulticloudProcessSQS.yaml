@@ -1,0 +1,25 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Transform: 'AWS::Serverless-2016-10-31'
+Description: Periodically polls an SQS queue and asynchronously consumes each message.
+Resources:
+  Levi9MulticloudProcessSQS:
+    Type: 'AWS::Serverless::Function'
+    Properties:
+      Handler: index.handler
+      Runtime: nodejs4.3
+      CodeUri: .
+      Description: >-
+        Periodically polls an SQS queue and asynchronously consumes each
+        message.
+      MemorySize: 128
+      Timeout: 10
+      Role: >-
+        arn:aws:iam::309285618281:role/service-role/Levi9MulticloudLamdaSQSPollerRole
+      Events:
+        Schedule1:
+          Type: Schedule
+          Properties:
+            Schedule: rate(1 minute)
+      Environment:
+        Variables:
+          queueUrl: 'https://sqs.eu-west-1.amazonaws.com/309285618281/levi9-multicloud'
